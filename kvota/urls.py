@@ -17,8 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from vacancy import views as vv
 from cources import views as cv
+from users import views as uv
 
 urlpatterns = [
+    path('exit/', uv.exit, name = 'logout'),
+    path('profile/', uv.index, name = 'profile'),
     path('cources/', cv.index, name = 'cources_list'),
     path('', vv.index, name = 'vacancy_list'),
     path('admin/', admin.site.urls),
