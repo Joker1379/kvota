@@ -13,10 +13,11 @@ class Profile(models.Model):
     city = models.CharField(max_length=50, blank=True, default='-')
     street = models.CharField(max_length=50, blank=True, default='-')
     move = models.CharField(max_length=10, blank=True, default='-')
-    job_wish = models.CharField(max_length=300, blank=True, default='-')
-    profession = models.CharField(max_length=300, blank=True, default='-')
-    experience = models.CharField(max_length=300, blank=True, default='-')
-    limits = models.CharField(max_length=300, blank=True, default='-')
+    phone = models.CharField(max_length=20, blank=True, default='-')
+    job_wish = models.CharField(max_length=300, blank=True, default='')
+    profession = models.CharField(max_length=300, blank=True, default='')
+    experience = models.CharField(max_length=300, blank=True, default='')
+    limits = models.CharField(max_length=300, blank=True, default='')
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):

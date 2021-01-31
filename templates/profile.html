@@ -6,7 +6,7 @@
             <div class="col-md-4">
                 <div class="profile-img">
                     {% load static %}
-                    <img src="{% static 'images/default_avatar.png' %}" alt="" width="210" height="210"/>
+                    <img src="{% static 'images/default_avatar.png' %}" alt="" width="250" height="250"/>
                     <!--
                     <div class="file btn btn-lg btn-primary">
                         Change Photo
@@ -15,26 +15,62 @@
                     -->
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md">
                 <div class="profile-head">
                     <h5>
                     {{ uobj.username }}
                     </h5>
                     <h6>
                         <span><strong>Желаемые cпециальности: </strong></span>
-                        <span class="badge badge-success">HTML5/CSS</span>
+                        {% if user.id == uobj.id %}
+                            {% for i in wish %}
+                                <a href="/profile/{{user.id}}/wish/{{i}}"><span class="badge badge-success">{{ i }}</span></a>
+                            {% endfor %}
+                            <span class="open-AddItem btn btn-sm btn-outline-success" data-toggle="modal" data-id="wish" data-target="#add_modal">Добавить</span>
+                        {% else %}
+                            {% for i in wish %}
+                                <span class="badge badge-success">{{ i }}</span>
+                            {% endfor %}
+                        {% endif %}
                     </h6>
                     <h6>
                         <span><strong>Полученные специальности: </strong></span>
-                        <span class="badge badge-warning">Adobe CS 5.5</span>
+                        {% if user.id == uobj.id %}
+                            {% for i in profession %}
+                                <a href="/profile/{{user.id}}/profession/{{i}}"><span class="badge badge-warning">{{ i }}</span></a>
+                            {% endfor %}
+                            <span class="open-AddItem btn btn-sm btn-outline-warning" data-toggle="modal" data-id="profession" data-target="#add_modal">Добавить</span>
+                        {% else %}
+                            {% for i in profession %}
+                                <span class="badge badge-warning">{{ i }}</span>
+                            {% endfor %}
+                        {% endif %}
                     </h6>
                     <h6>
                         <span><strong>Опыт: </strong></span>
-                        <span class="badge badge-primary">Microsoft Office</span>
+                        {% if user.id == uobj.id %}
+                            {% for i in experience %}
+                                <a href="/profile/{{user.id}}/experience/{{i}}"><span class="badge badge-primary">{{ i }}</span></a>
+                            {% endfor %}
+                            <span class="open-AddItem btn btn-sm btn-outline-primary" data-toggle="modal" data-id="experience" data-target="#add_modal">Добавить</span>
+                        {% else %}
+                            {% for i in experience %}
+                                <span class="badge badge-primary">{{ i }}</span>
+                            {% endfor %}
+                        {% endif %}
                     </h6>
                     <h6>
                         <span><strong>Ограничения: </strong></span>
-                        <span class="badge badge-danger">Ограничение 1</span>
+                        {% if user.id == uobj.id %}
+                            {% for i in limits %}
+                                <a href="/profile/{{user.id}}/limits/{{i}}"><span class="badge badge-danger">{{ i }}</span></a>
+                            {% endfor %}
+                            <span class="open-AddItem btn btn-sm btn-outline-danger" data-toggle="modal" data-id="limits" data-target="#add_modal">Добавить</span>
+                        {% else %}
+                            {% for i in limits %}
+                                <span class="badge badge-danger">{{ i }}</span>
+                            {% endfor %}
+                        {% endif %}
                     </h6>
                     
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -59,7 +95,7 @@
                     {{ uobj.date_joined }}
                     <br><br><br>
                     {% if user.id == uobj.id %}
-                        <a class="btn btn-sm btn-outline-primary" href="#">Редактировать Профиль</a><br><hr>
+                        <a class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#profile_modal">Редактировать Профиль</a><br><hr>
                         <a class="btn btn-sm btn-outline-danger" href="/exit">Выйти</a><br>
                     {% endif %}
                 </div>
@@ -72,7 +108,7 @@
                                 <label>ФИО:</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ uobj.profile.fio }}</p>
+                                <center><p>{{ uobj.profile.fio }}</p></center>
                             </div>
                         </div>
                         <div class="row">
@@ -80,7 +116,7 @@
                                 <label>Пол:</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ uobj.profile.sex }}</p>
+                                <center><p>{{ uobj.profile.sex }}</p></center>
                             </div>
                         </div>
                         <div class="row">
@@ -88,13 +124,13 @@
                                 <label>Возраст:</label>
                             </div>
                             <div class="col-md-6">
-                                <p>
+                                <center><p>
                                     {% if uobj.profile.age == 0 %}
                                         -
                                     {% else %}
                                         {{ uobj.profile.age }}
                                     {% endif %} 
-                                </p>
+                                </p></center>
                             </div>
                         </div>
                         <div class="row">
@@ -102,7 +138,7 @@
                                 <label>Образование:</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ uobj.profile.education }}</p>
+                                <center><p>{{ uobj.profile.education }}</p></center>
                             </div>
                         </div>
                         <div class="row">
@@ -110,7 +146,7 @@
                                 <label>Группа инвалидности:</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ uobj.profile.group }}</p>
+                                <center><p>{{ uobj.profile.group }}</p></center>
                             </div>
                         </div>
                         <div class="row">
@@ -118,7 +154,7 @@
                                 <label>Город:</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ uobj.profile.city }}</p>
+                                <center><p>{{ uobj.profile.city }}</p></center>
                             </div>
                         </div>
                         <div class="row">
@@ -126,7 +162,7 @@
                                 <label>Улица:</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ uobj.profile.street }}</p>
+                                <center><p>{{ uobj.profile.street }}</p></center>
                             </div>
                         </div>
                         <div class="row">
@@ -134,7 +170,15 @@
                                 <label>Готовность переезжать:</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ uobj.profile.move }}</p>
+                                <center><p>{{ uobj.profile.move }}</p></center>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Контактный телефон:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <center><p>{{ uobj.profile.phone }}</p></center>
                             </div>
                         </div>
                     </div>

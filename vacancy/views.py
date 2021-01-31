@@ -10,7 +10,7 @@ def index(request):
             form = RegistrationForm(request.POST)
             if form.is_valid():
                 user = form.save()
-                # Так сожраняются дополнительные поля профиля:
+                # Так сожраняются дополнительные поля профиля при регистрации:
                 # user.refresh_from_db()
                 # user.profile.sex = form.cleaned_data.get('sex')
                 # user.save()
