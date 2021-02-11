@@ -158,4 +158,80 @@
   </div>
 </div>
 
+<div class="modal fade" id="vacancy_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Информация о Вакансии</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="modal-body">
+        <center>
+          <table>
+            {{ vform }}
+          </table>
+        </center>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-primary" id="category" name="action" value="category">Принять</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8">
+            <center>
+              <br><br><br><br>
+              <h2>Nicole Pearson</h2>
+              <p><strong>About: </strong> Web Designer / UI. </p>
+            </center>
+          </div>
+          <div class="col">
+            <!--Add image here-->
+            <br>
+            <svg class="bd-placeholder-img" width="200" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/></svg>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <br>
+            <center>
+              Read, out with friends, listen to music, draw and learn new things.
+            </center>
+            <br>
+          </div>
+        </div>
+        {% for i in vlabels %}
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <center><strong>{{i}}:</strong></center>
+          </div>
+          <div class="col-md-6">
+            <center><p>
+              ...
+            </p></center>
+          </div>
+        </div>
+        {% endfor %}
+        <br>
+        <div class="row justify-content-center">
+          <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Закрыть</button>
+        </div>
+        <br>
+      </div>
+    </div>
+  </div>
+</div>
+
 </html>

@@ -24,7 +24,6 @@ def index(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             return redirect('/')
-    else:
-        data["login"] = LoginForm()
-        data["registration"] = RegistrationForm()
+    data["login"] = LoginForm()
+    data["registration"] = RegistrationForm()
     return render(request, 'vacancy.html', data)

@@ -185,8 +185,17 @@
                     <div class="tab-pane fade" id="vacancy" role="tabpanel" aria-labelledby="vacancy-tab">
                         <center>
                         {% if user.id == uobj.id %}
-                            <a class="btn btn-sm btn-outline-primary" href="#">Добавить Вакансию</a><br><br>
-                            Вы не добавляли вакансий...
+                            <a class="open-AddItem btn btn-sm btn-outline-primary" data-toggle="modal" data-id="add_vacancy" data-target="#vacancy_modal">Добавить Вакансию</a><br><br>
+                            <ul class="list-group list-group-flush">
+                                {% for item in vacancy %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a data-toggle="modal" data-target="#info_modal" href="#">{{ item.name }}</a>
+                                    <span class="badge badge-primary badge-pill">{{ item.date }}</span>
+                                </li>
+                                {% empty %}
+                                    Вы не добавляли вакансий...
+                                {% endfor %}
+                            </ul>
                         {% else %}
                             Пользователь не предлагает вакансий...
                         {% endif %}

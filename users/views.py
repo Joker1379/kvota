@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from .forms import ProfileForm
+from vacancy.forms import VacancyForm
+from vacancy.models import Vacancy
 
 def index(request, userid):
     data = {}
     user = User.objects.get(id = userid)
     if request.method == 'POST':
-        print(request.POST["action"])
         if request.POST["action"] == "info":
             form = ProfileForm(request.POST, instance=request.user.profile)
             form.save()
@@ -23,6 +24,11 @@ def index(request, userid):
         elif request.POST["action"] == "limits":
             user.profile.limits = user.profile.limits + request.POST["input"] + '!'
             user.save()
+        elif request.POST["action"] == "add_vacancy":
+            form = VacancyForm(request.POST)
+            vacancy = form.save(commit=False)
+            vacancy.user = request.user
+            vacancy.save()
         return redirect('/profile/'+str(userid))
     data["uobj"] = user
     data["profile"] = ProfileForm(instance=user.profile)
@@ -30,6 +36,17 @@ def index(request, userid):
     data["profession"] = user.profile.profession.split('!')
     data["experience"] = user.profile.experience.split('!')
     data["limits"] = user.profile.limits.split('!')
+    data["vform"] = VacancyForm()
+    data["vacancy"] = Vacancy.objects.filter(user = user)
+    data["vlabels"] = [
+        "Требуемое образование",
+        "Режим работы",
+        "Город",
+        "Улица",
+        "Строение / Расположение офиса",
+        "Email",
+        "Контактный телефон",
+    ]
     return render(request, 'profile.html', data)
 
 def del_item(request, userid, category, item):
