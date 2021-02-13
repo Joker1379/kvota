@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from users.forms import RegistrationForm, LoginForm
+from .models import Vacancy
 
 def index(request):
     data = {}
@@ -27,3 +28,8 @@ def index(request):
     data["login"] = LoginForm()
     data["registration"] = RegistrationForm()
     return render(request, 'vacancy.html', data)
+
+def delete(request, vid):
+    vacancy = Vacancy.objects.get(id = vid)
+    vacancy.delete()
+    return redirect('/profile/'+str(request.user.id))

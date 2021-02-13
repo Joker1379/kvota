@@ -49,6 +49,20 @@
     var category = $(this).data('id');
     $(".modal-footer #category").val(category);
   });
+  $(document).on("click", ".open-VacancyInfo", function () {
+    var data = $(this).data('id').split("!");
+    $(".modal-content #name").html(data[0]);
+    $(".modal-content #date").html(data[1]);
+    $(".modal-content #description").html(data[2]);
+    $(".modal-content #education").html(data[3]);
+    $(".modal-content #mode").html(data[4]);
+    $(".modal-content #city").html(data[5]);
+    $(".modal-content #street").html(data[6]);
+    $(".modal-content #house").html(data[7]);
+    $(".modal-content #email").html(data[8]);
+    $(".modal-content #phone").html(data[9]);
+    document.getElementById("delv").setAttribute("href", "/vacancy_del/"+data[10]);
+  });
 </script>
 </body>
 
@@ -193,8 +207,8 @@
           <div class="col-md-8">
             <center>
               <br><br><br><br>
-              <h2>Nicole Pearson</h2>
-              <p><strong>About: </strong> Web Designer / UI. </p>
+              <h2><label id="name"></label></h2>
+              <label class="badge badge-primary badge-pill" id="date"></label>
             </center>
           </div>
           <div class="col">
@@ -207,7 +221,7 @@
           <div class="col">
             <br>
             <center>
-              Read, out with friends, listen to music, draw and learn new things.
+              <label id="description"></label>
             </center>
             <br>
           </div>
@@ -219,14 +233,30 @@
           </div>
           <div class="col-md-6">
             <center><p>
-              ...
+              {% if i == "Требуемое образование" %}
+                <label id="education"></label>
+              {% elif i == "Режим работы" %}
+                <label id="mode"></label>
+              {% elif i == "Город" %}
+                <label id="city"></label>
+              {% elif i == "Улица" %}
+                <label id="street"></label>
+              {% elif i == "Строение / Расположение офиса" %}
+                <label id="house"></label>
+              {% elif i == "Email" %}
+                <label id="email"></label>
+              {% elif i == "Контактный телефон" %}
+                <label id="phone"></label>
+              {% endif %}
             </p></center>
           </div>
         </div>
         {% endfor %}
         <br>
         <div class="row justify-content-center">
-          <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Закрыть</button>
+            <button type="button" class="btn btn-outline-primary" href="#">Редактировать</button>&nbsp
+            <a type="button" id="delv" class="btn btn-outline-danger" href="#">Удалить</a>&nbsp
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
         </div>
         <br>
       </div>

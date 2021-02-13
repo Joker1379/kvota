@@ -189,7 +189,8 @@
                             <ul class="list-group list-group-flush">
                                 {% for item in vacancy %}
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <a data-toggle="modal" data-target="#info_modal" href="#">{{ item.name }}</a>
+                                    <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.id}}"
+                                    class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name }}</a>
                                     <span class="badge badge-primary badge-pill">{{ item.date }}</span>
                                 </li>
                                 {% empty %}

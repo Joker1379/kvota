@@ -21,6 +21,7 @@ from users import views as uv
 
 urlpatterns = [
     path('exit/', uv.exit, name = 'logout'),
+    path('vacancy_del/<int:vid>/', vv.delete, name = 'delete_vacancy'),
     path('profile/<int:userid>/<str:category>/<str:item>/', uv.del_item, name = 'profile'),
     path('profile/<int:userid>/', uv.index, name = 'profile'),
     path('cources/', cv.index, name = 'cources_list'),
