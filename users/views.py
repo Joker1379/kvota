@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from .forms import ProfileForm
-from vacancy.forms import VacancyForm
 from vacancy.models import Vacancy
+from vacancy.forms import VacancyForm
 
 def index(request, userid):
     data = {}
@@ -29,6 +29,10 @@ def index(request, userid):
             vacancy = form.save(commit=False)
             vacancy.user = request.user
             vacancy.save()
+        elif request.POST["action"].split('!')[0] == "red_vacancy":
+            vacancy = Vacancy.objects.get(id=int(request.POST["action"].split('!')[1]))
+            form = VacancyForm(request.POST, instance=vacancy)
+            form.save()
         return redirect('/profile/'+str(userid))
     data["uobj"] = user
     data["profile"] = ProfileForm(instance=user.profile)

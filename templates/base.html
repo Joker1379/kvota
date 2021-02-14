@@ -8,26 +8,26 @@
 </head>
 <body>
 <div class="container">
-    <header class="kvota-header py-1">
+    <header class="kvota-header">
         <div class="row flex-nowrap justify-content-between align-items-center">
-          <div class="col-4 pt-1">
+          <div class="col-4 pt-3">
             <!-- Add Logo Here -->
           </div>
           <div class="col-4 text-center">
-            <a class="blog-header-logo text-dark" href="/"><font size = 14>Kvota-S</font></a>
+            <a href="/"><font size = 14>Kvota-S</font></a>
           </div>
-          <div class="col-4 d-flex justify-content-end align-items-center">
+          <div class="col-4 d-flex justify-content-end align-items-center pt-3">
             {% if user.is_authenticated %}
-              <a class="btn btn-sm btn-outline-primary" href="/profile/{{ user.id }}">Профиль</a>
+              <a class="btn btn-outline-primary" href="/profile/{{ user.id }}">Профиль</a>
             {% else %}
-              <a class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#login_modal">Вход</a>
+              <a class="btn btn-outline-primary" data-toggle="modal" data-target="#login_modal">Вход</a>
               &nbsp
-              <a class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#registration_modal">Регистрация</a>
+              <a class="btn btn-outline-secondary" data-toggle="modal" data-target="#registration_modal">Регистрация</a>
             {% endif %} 
           </div>
         </div>
     </header>
-    <div class="nav-scroller py-2 mb-2">
+    <div class="nav-scroller">
         <font size = 5>
         <nav class="nav d-flex justify-content-around">
           <a class="p-2 text-muted" href="/">Вакансии</a>
@@ -46,8 +46,8 @@
 
 <script>
   $(document).on("click", ".open-AddItem", function () {
-    var category = $(this).data('id');
-    $(".modal-footer #category").val(category);
+    var item = $(this).data('id');
+    $(".modal-footer #category").val(item);
   });
   $(document).on("click", ".open-VacancyInfo", function () {
     var data = $(this).data('id').split("!");
@@ -61,8 +61,27 @@
     $(".modal-content #house").html(data[7]);
     $(".modal-content #email").html(data[8]);
     $(".modal-content #phone").html(data[9]);
-    document.getElementById("delv").setAttribute("href", "/vacancy_del/"+data[10]);
   });
+  $(document).on("click", ".open-VacancyAction", function () {
+    var action = $(this).data('id');
+    if (action == "add_vacancy"){
+      $(".modal-footer #v_action").val(action);
+    } else {
+      data = action.split('!');
+      $('#v_form [name=name]').val(data[0]);
+      $('#v_form [name=description]').val(data[1]);
+      $('#v_form [name=education]').val(data[2]);
+      $('#v_form [name=mode]').val(data[3]);
+      $('#v_form [name=city]').val(data[4]);
+      $('#v_form [name=street]').val(data[5]);
+      $('#v_form [name=house]').val(data[6]);
+      $('#v_form [name=email]').val(data[7]);
+      $('#v_form [name=phone]').val(data[8]);
+      $(".modal-footer #v_action").val("red_vacancy!"+data[9]);
+    }
+  });
+  // Пример того, как можно назначить значение атрибута:
+  // document.getElementById("delv").setAttribute("href", "/vacancy_del/"+data[10]);
 </script>
 </body>
 
@@ -176,12 +195,12 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Информация о Вакансии</h5>
+        <h5 class="modal-title" id="v_modal_litle">Информация о Вакансии</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="POST">
+      <form method="POST" id="v_form">
         {% csrf_token %}
         <div class="modal-body">
         <center>
@@ -192,7 +211,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-          <button type="submit" class="btn btn-primary" id="category" name="action" value="category">Принять</button>
+          <button type="submit" class="btn btn-primary" id="v_action" name="action">Принять</button>
         </div>
       </form>
     </div>
@@ -254,9 +273,7 @@
         {% endfor %}
         <br>
         <div class="row justify-content-center">
-            <button type="button" class="btn btn-outline-primary" href="#">Редактировать</button>&nbsp
-            <a type="button" id="delv" class="btn btn-outline-danger" href="#">Удалить</a>&nbsp
-            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
+            <button class="btn btn-primary" data-dismiss="modal">Закрыть</button>
         </div>
         <br>
       </div>
