@@ -61,10 +61,21 @@
     $(".modal-content #house").html(data[7]);
     $(".modal-content #email").html(data[8]);
     $(".modal-content #phone").html(data[9]);
+    $(".modal-content #v_username").html(data[10]);
+    document.getElementById("v_username").setAttribute("href", "/profile/"+data[11]);
   });
   $(document).on("click", ".open-VacancyAction", function () {
     var action = $(this).data('id');
     if (action == "add_vacancy"){
+      $('#v_form [name=name]').val('');
+      $('#v_form [name=description]').val('');
+      $('#v_form [name=education]').val('-');
+      $('#v_form [name=mode]').val('-');
+      $('#v_form [name=city]').val('');
+      $('#v_form [name=street]').val('');
+      $('#v_form [name=house]').val('');
+      $('#v_form [name=email]').val('');
+      $('#v_form [name=phone]').val('');
       $(".modal-footer #v_action").val(action);
     } else {
       data = action.split('!');
@@ -223,11 +234,11 @@
     <div class="modal-content">
       <div class="container">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-8 py-5">
             <center>
-              <br><br><br><br>
               <h2><label id="name"></label></h2>
-              <label class="badge badge-primary badge-pill" id="date"></label>
+              <label class="badge badge-primary badge-pill" id="date"></label><br><br>
+              <a id="v_username" href=""></a>
             </center>
           </div>
           <div class="col">
@@ -247,9 +258,7 @@
         </div>
         {% for i in vlabels %}
         <div class="row justify-content-center">
-          <div class="col-md-6">
-            <center><strong>{{i}}:</strong></center>
-          </div>
+          <div class="col-md-6"><center><strong>{{i}}:</strong></center></div>
           <div class="col-md-6">
             <center><p>
               {% if i == "Требуемое образование" %}

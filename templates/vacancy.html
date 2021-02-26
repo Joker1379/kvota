@@ -1,33 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row mb-2">
+  {% for item in vacancy %}
   <div class="col-md-6">
     <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
       <div class="col p-4 d-flex flex-column position-static">
-        <strong class="d-inline-block mb-2 text-primary">Предприятие 1</strong>
-        <h3 class="mb-0">Вакансия 1</h3>
-        <div class="mb-1 text-muted">Nov 12</div>
-        <p class="card-text mb-auto">Краткое описание</p>
-        <a href="#" class="stretched-link">Подробнее...</a>
+        <h3 class="mb-0">{{ item.name }}</h3>
+        <div class="mb-1 text-muted">{{ item.date }}</div>
+        <strong class="d-inline-block mb-2 text-dark">Описание:</strong>
+        <p class="card-text mb-auto">{{ item.description|truncatechars:100 }}</p>
+        <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}"
+        class="open-VacancyInfo stretched-link" data-toggle="modal" data-target="#info_modal" href="#">Подробнее...</a>
       </div>
       <div class="col-auto d-none d-lg-block">
         <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/></svg>
       </div>
     </div>
   </div>
-  <div class="col-md-6">
-    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-      <div class="col p-4 d-flex flex-column position-static">
-        <strong class="d-inline-block mb-2 text-primary">Предприятие 2</strong>
-        <h3 class="mb-0">Вакансия 2</h3>
-        <div class="mb-1 text-muted">Nov 11</div>
-        <p class="mb-auto">Краткое описание</p>
-        <a href="#" class="stretched-link">Подробнее...</a>
-      </div>
-      <div class="col-auto d-none d-lg-block">
-        <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/></svg>
-      </div>
-    </div>
-  </div>
+  {% endfor %}
 </div>
 {% endblock content %}

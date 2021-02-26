@@ -27,6 +27,16 @@ def index(request):
             return redirect('/')
     data["login"] = LoginForm()
     data["registration"] = RegistrationForm()
+    data["vacancy"] = list(reversed(Vacancy.objects.all()))
+    data["vlabels"] = [
+        "Требуемое образование",
+        "Режим работы",
+        "Город",
+        "Улица",
+        "Строение / Расположение офиса",
+        "Email",
+        "Контактный телефон",
+    ]
     return render(request, 'vacancy.html', data)
 
 def delete(request, vid):
