@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'vacancy',
     'cources',
     'users',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

@@ -6,7 +6,7 @@ from .models import Profile
 class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'password1', 'password2', )
+        fields = ('username', 'password1', 'password2')
 
 class LoginForm(AuthenticationForm):
     class Meta:
@@ -14,26 +14,36 @@ class LoginForm(AuthenticationForm):
         fields = ('username', 'password')
 
 class ProfileForm(forms.ModelForm):
-    sex = forms.ChoiceField(choices=(("-", "-"), ("Мужской", "Мужской"), ("Женский", "Женский")), label="Пол")
-    education = forms.ChoiceField(
-        choices=(("-", "-"), 
-        ("Начальное общее", "Начальное общее"), 
-        ("Основное общее", "Основное общее"),
-        ("Среднее общее", "Среднее общее"),
-        ("Среднее профессиональное", "Среднее профессиональное"),
-        ("Высшее образование — бакалавриат", "Высшее образование — бакалавриат"),
-        ("Высшее образование — специалитет/магистратура", "Высшее образование — специалитет/магистратура"),
-        ), label="Образование")
-    group = forms.ChoiceField(choices=(("-", "-"), ("1", "1"), ("2", "2"), ('3', '3')), label="Группа инвалидности:")
-    move = forms.ChoiceField(choices=(("-", "-"), ("Да", "Да"), ("Нет", "Нет")), label="Готовность переезжать")
-
     class Meta:
         model = Profile
         fields = ('fio', 'sex', 'age', 'education', 'group', 'city', 'street', 'move', 'phone')
         labels = {
-            'fio': 'ФИО',
-            'age': 'Возраст',
-            'city': 'Город',
-            'street': 'Улица',
-            'phone': 'Контактный телефон',
-        }
+            'fio': 'ФИО:',
+            'sex': 'Пол:',
+            'age': 'Возраст:',
+            'education': 'Образование:',
+            'group': 'Группа инвалидности:',
+            'city': 'Город:',
+            'street': 'Улица:',
+            'move': 'Готовность переезжать:',
+            'phone': 'Контактный телефон:'}
+        widgets = {
+            'fio': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
+            'sex': forms.Select(attrs={'class': 'form-control form-control-md'},
+                choices=(('-', '-'), ('Мужской', 'Мужской'), ('Женский', 'Женский'))),
+            'age': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
+            'education': forms.Select(attrs={'class': 'form-control form-control-md'},
+                choices=(('-', '-'), 
+                ('Начальное общее', 'Начальное общее'), 
+                ('Основное общее', 'Основное общее'),
+                ('Среднее общее', 'Среднее общее'),
+                ('Среднее профессиональное', 'Среднее профессиональное'),
+                ('Высшее образование — бакалавриат', 'Высшее образование — бакалавриат'),
+                ('Высшее образование — специалитет/магистратура', 'Высшее образование — специалитет/магистратура'))),
+            'group': forms.Select(attrs={'class': 'form-control form-control-md'},
+                choices=(('-', '-'), ('1', '1'), ('2', '2'), ('3', '3'))),
+            'city': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
+            'street': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
+            'move': forms.Select(attrs={'class': 'form-control form-control-md'},
+                choices=(('-', '-'), ('Да', 'Да'), ('Нет', 'Нет'))),
+            'phone': forms.TextInput(attrs={'class': 'form-control form-control-md'})}
