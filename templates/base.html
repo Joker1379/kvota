@@ -6,6 +6,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">​
   {% load crispy_forms_tags %}
   <title>Kvota-S</title>
+  <style>
+    #ButtonOverStretched {
+      z-index: 3;
+      position: relative;
+    }
+  </style>
 </head>
 <body>
 <div class="container">
@@ -83,13 +89,16 @@
       $('#v_form [name=name]').val(data[0]);
       $('#v_form [name=description]').val(data[1]);
       $('#v_form [name=education]').val(data[2]);
-      $('#v_form [name=mode]').val(data[3]);
-      $('#v_form [name=city]').val(data[4]);
-      $('#v_form [name=street]').val(data[5]);
-      $('#v_form [name=house]').val(data[6]);
-      $('#v_form [name=email]').val(data[7]);
-      $('#v_form [name=phone]').val(data[8]);
-      $(".modal-footer #v_action").val("red_vacancy!"+data[9]);
+      $('#v_form [name=skills]').val(data[3].split(', '));
+      $('#v_form [name=mode]').val(data[4]);
+      $('#v_form [name=group]').val(data[5]);
+      $('#v_form [name=limits]').val(data[6].split(', '));
+      $('#v_form [name=city]').val(data[7]);
+      $('#v_form [name=street]').val(data[8]);
+      $('#v_form [name=house]').val(data[9]);
+      $('#v_form [name=email]').val(data[10]);
+      $('#v_form [name=phone]').val(data[11]);
+      $(".modal-footer #v_action").val("red_vacancy!"+data[12]);
     }
   });
   // Пример того, как можно назначить значение атрибута:

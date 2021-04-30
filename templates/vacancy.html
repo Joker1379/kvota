@@ -18,8 +18,18 @@
   <div class="col-md-6">
     <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
       <div class="col p-4 d-flex flex-column position-static">
-        <h3 class="mb-0">{{ item.name }}</h3>
-        <div class="mb-1 text-muted">{{ item.date }}</div>
+        <div class="row">
+          <div class="col">
+            {% if user.is_authenticated %}
+              <a class="btn btn-outline-primary" id="ButtonOverStretched" data-target="#"><b>+</b></a>
+            {% endif %}
+          </div>
+          <div class="col-9"><h3 class="mb-0">{{ item.name }}</h3></div>
+        </div>
+        <div class="row">
+          <div class="col"></div>
+          <div class="col-8"><div class="mb-1 text-muted">{{ item.date }}</div></div>
+        </div>
         <strong class="d-inline-block mb-2 text-dark">Описание:</strong>
         <p class="card-text mb-auto">{{ item.description|truncatechars:100 }}</p>
         <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}"
@@ -30,6 +40,8 @@
       </div>
     </div>
   </div>
+  {% empty %}
+    Доступных вакансий не найдено...
   {% endfor %}
 </div>
 {% endblock content %}

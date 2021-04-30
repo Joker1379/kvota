@@ -1,5 +1,6 @@
 from django import forms
-from .models import Vacancy
+from .models import Vacancy, S_C, L_C
+from multiselectfield import MultiSelectFormField
 
 E_C = (('-', '-'), ('Начальное общее', 'Начальное общее'), ('Основное общее', 'Основное общее'),
     ('Среднее общее', 'Среднее общее'), ('Среднее профессиональное', 'Среднее профессиональное'),
@@ -9,15 +10,19 @@ M_C = (('-', '-'), ('Пятидневная неделя', 'Пятидневна
     ('Работа по гибкому графику', 'Работа по гибкому графику'), ('Посменная работа', 'Посменная работа'),
     ('Разделение рабочего дня на части', 'Разделение рабочего дня на части'), ('Дистанционный режим', 'Дистанционный режим'))
 
+
 class VacancyForm(forms.ModelForm):
     class Meta:
         model = Vacancy
-        fields = ('name', 'description', 'education', 'mode', 'city', 'street', 'house', 'email', 'phone')
+        fields = ('name', 'description', 'education', 'skills', 'mode', 'group', 'limits', 'city', 'street', 'house', 'email', 'phone')
         labels = {
             'name': 'Наименование вакансии:',
             'description': 'Описание:',
             'education': 'Требуемое образование:',
+            'skills': 'Желательные навыки:',
             'mode': 'Режим работы:',
+            'group': 'Минимальная допустимая группа инвалидности:',
+            'limits': 'Неподходящие физические ограничения:',
             'city': 'Город:',
             'street': 'Улица:',
             'house': 'Строение / Расположение офиса:',
@@ -28,6 +33,8 @@ class VacancyForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control form-control-md'}),
             'education': forms.Select(attrs={'class': 'form-control form-control-md'}, choices=E_C),
             'mode': forms.Select(attrs={'class': 'form-control form-control-md'}, choices=M_C),
+            'group': forms.Select(attrs={'class': 'form-control form-control-md'},
+                choices=(('-', '-'), ('1', '1'), ('2', '2'), ('3', '3'))),
             'city': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'street': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'house': forms.TextInput(attrs={'class': 'form-control form-control-md'}),

@@ -31,7 +31,7 @@ def index(request):
         elif request.POST['action'] == 'filter':
             v, vs = list(reversed(Vacancy.objects.all())), []
             for i in v:
-                if request.POST.get('name') in i.name and request.POST.get('city') in i.city and request.POST.get('street') in i.street:
+                if request.POST.get('name').lower() in i.name.lower() and request.POST.get('city').lower() in i.city.lower() and request.POST.get('street').lower() in i.street.lower():
                     if request.POST.get('education') == '-' or request.POST.get('education') == i.education:
                         if request.POST.get('mode') == '-' or request.POST.get('mode') == i.mode:
                             vs.append(i)
