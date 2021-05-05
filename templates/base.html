@@ -63,13 +63,24 @@
     $(".modal-content #description").html(data[2]);
     $(".modal-content #education").html(data[3]);
     $(".modal-content #mode").html(data[4]);
-    $(".modal-content #city").html(data[5]);
-    $(".modal-content #street").html(data[6]);
-    $(".modal-content #house").html(data[7]);
-    $(".modal-content #email").html(data[8]);
-    $(".modal-content #phone").html(data[9]);
-    $(".modal-content #v_username").html(data[10]);
-    document.getElementById("v_username").setAttribute("href", "/profile/"+data[11]);
+    $(".modal-content #group").html(data[5]);
+    $(".modal-content #city").html(data[6]);
+    $(".modal-content #street").html(data[7]);
+    $(".modal-content #house").html(data[8]);
+    $(".modal-content #email").html(data[9]);
+    $(".modal-content #phone").html(data[10]);
+    $(".modal-content #v_username").html(data[11]);
+    document.getElementById("v_username").setAttribute("href", "/profile/"+data[12]);
+    skills = data[13].split(', '), limits = data[14].split(', ');
+    s = '', l = '';
+    for (let i = 0; i < skills.length; i++) {
+      s += '<span class="badge badge-info">'+skills[i].slice(0, -1)+'</span> '
+    }
+    for (let i = 0; i < limits.length; i++) {
+      l += '<span class="badge badge-danger">'+limits[i].slice(0, -1)+'</span> '
+    }
+    $(".modal-content #skills").html(s);
+    $(".modal-content #limits").html(l);
   });
   $(document).on("click", ".open-VacancyAction", function () {
     var action = $(this).data('id');
@@ -78,6 +89,7 @@
       $('#v_form [name=description]').val('');
       $('#v_form [name=education]').val('-');
       $('#v_form [name=mode]').val('-');
+      $('#v_form [name=group]').val('-');
       $('#v_form [name=city]').val('');
       $('#v_form [name=street]').val('');
       $('#v_form [name=house]').val('');
@@ -236,28 +248,37 @@
     <div class="modal-content">
       <div class="container">
         <div class="row">
-          <div class="col-md-8 py-5">
+          <div class="col-md-8 pt-5">
             <center>
               <h2><label id="name"></label></h2>
               <label class="badge badge-primary badge-pill" id="date"></label><br><br>
               <a id="v_username" href=""></a>
             </center>
           </div>
-          <div class="col">
+          <div class="col pt-3">
             <!--Add image here-->
-            <br>
             <svg class="bd-placeholder-img" width="200" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/></svg>
           </div>
         </div>
         <div class="row">
-          <div class="col">
-            <br>
+          <div class="col pt-3">
             <center>
               <label id="description"></label>
             </center>
-            <br>
           </div>
         </div>
+        <hr>
+        <center>
+        <h6>
+          <span><strong>&nbsp Желательные Навыки: </strong></span>
+          <span id="skills"> - </span>
+        </h6>
+        <h6>
+          <span><strong>&nbsp Ограничения: </strong></span>
+          <span id="limits"> - </span>
+        </h6>
+        </center>
+        <hr>
         {% for i in vlabels %}
         <div class="row justify-content-center">
           <div class="col-md-6"><center><strong>{{i}}:</strong></center></div>
@@ -267,6 +288,8 @@
                 <label id="education"></label>
               {% elif i == "Режим работы" %}
                 <label id="mode"></label>
+              {% elif i == "Допустимая группа инвалидности" %}
+                <label id="group"></label>
               {% elif i == "Город" %}
                 <label id="city"></label>
               {% elif i == "Улица" %}
@@ -314,5 +337,4 @@
     </div>
   </div>
 </div>
-
 </html>

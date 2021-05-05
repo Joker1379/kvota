@@ -4,8 +4,7 @@ from django.contrib.auth.models import User
 from .forms import ProfileForm
 from vacancy.models import Vacancy
 from vacancy.forms import VacancyForm
-
-V_L = ['Требуемое образование', 'Режим работы', 'Город', 'Улица', 'Строение / Расположение офиса', 'Email', 'Контактный телефон']
+from vacancy.views import V_L
 
 def index(request, userid):
     data = {}
@@ -42,7 +41,6 @@ def index(request, userid):
     data['wish'] = user.profile.job_wish.split('!')
     data['profession'] = user.profile.profession.split('!')
     data['experience'] = user.profile.experience.split('!')
-    data['limits'] = user.profile.limits.split('!')
     data['vform'] = VacancyForm()
     data['vacancy'] = list(reversed(Vacancy.objects.filter(user = user)))
     data['vlabels'] = V_L
@@ -59,9 +57,6 @@ def del_item(request, userid, category, item):
     if category == 'experience':
         s = user.profile.experience
         user.profile.experience = s[0:s.find(item)]+s[s.find(item)+len(item)+1:]
-    if category == 'limits':
-        s = user.profile.limits
-        user.profile.limits = s[0:s.find(item)]+s[s.find(item)+len(item)+1:]
     user.save()
     return redirect('/profile/'+str(userid))
 

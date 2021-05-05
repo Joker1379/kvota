@@ -2,11 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Profile
-
-E_C = (('-', '-'), ('Начальное общее', 'Начальное общее'), ('Основное общее', 'Основное общее'),
-    ('Среднее общее', 'Среднее общее'), ('Среднее профессиональное', 'Среднее профессиональное'),
-    ('Высшее образование — бакалавриат', 'Высшее образование — бакалавриат'),
-    ('Высшее образование — специалитет/магистратура', 'Высшее образование — специалитет/магистратура'))
+from vacancy.forms import E_C
 
 class RegistrationForm(UserCreationForm):
     password1 = forms.CharField(label="Пароль:", widget=forms.PasswordInput(attrs={'class':'form-control form-control-md', 'type':'password'}))
@@ -27,13 +23,15 @@ class LoginForm(AuthenticationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('fio', 'sex', 'age', 'education', 'group', 'city', 'street', 'move', 'phone')
+        fields = ('fio', 'sex', 'age', 'education', 'skills', 'group', 'limits', 'city', 'street', 'move', 'phone')
         labels = {
             'fio': 'ФИО:',
             'sex': 'Пол:',
             'age': 'Возраст:',
             'education': 'Образование:',
+            'skills': 'Навыки:',
             'group': 'Группа инвалидности:',
+            'limits': 'Физические ограничения:',
             'city': 'Город:',
             'street': 'Улица:',
             'move': 'Готовность переезжать:',

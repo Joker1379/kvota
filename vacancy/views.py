@@ -5,7 +5,7 @@ from users.forms import RegistrationForm, LoginForm
 from .forms import VacancySearch
 from .models import Vacancy
 
-V_L = ['Требуемое образование', 'Режим работы', 'Город', 'Улица', 'Строение / Расположение офиса', 'Email', 'Контактный телефон']
+V_L = ['Требуемое образование', 'Режим работы', 'Допустимая группа инвалидности', 'Город', 'Улица', 'Строение / Расположение офиса', 'Email', 'Контактный телефон']
 
 def index(request):
     data = {}

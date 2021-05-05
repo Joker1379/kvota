@@ -58,20 +58,19 @@
             {% endfor %}
           {% endif %}
         </h6>
+        <hr>
+        <h6>
+          <span><strong>Навыки: </strong></span>
+          {% for i in uobj.profile.skills %}
+            <span class="badge badge-info">{{ i|slice:":-1" }}</span>
+          {% endfor %}
+        </h6>
         <h6>
           <span><strong>Ограничения: </strong></span>
-          {% if user.id == uobj.id %}
-            {% for i in limits %}
-              <a href="/profile/{{user.id}}/limits/{{i}}"><span class="badge badge-danger">{{ i }}</span></a>
-            {% endfor %}
-            <span class="open-AddItem btn btn-sm btn-outline-danger" data-toggle="modal" data-id="limits" data-target="#add_modal">Добавить</span>
-          {% else %}
-            {% for i in limits %}
-              <span class="badge badge-danger">{{ i }}</span>
-            {% endfor %}
-          {% endif %}
+          {% for i in uobj.profile.limits %}
+            <span class="badge badge-danger">{{ i|slice:":-1" }}</span>
+          {% endfor %}
         </h6>
-        
         <ul class="nav nav-tabs" id="profile_tabs" role="tablist">
           <li class="nav-item">
             <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Информация</a>
@@ -180,14 +179,14 @@
             </div>
           </div>
         </div>
-        <div class="tab-pane fade" id="vacancy" role="tabpanel" aria-labelledby="vacancy-tab">
+        <div class="tab-pane fade pt-3" id="vacancy" role="tabpanel" aria-labelledby="vacancy-tab">
           <center>
           {% if user.id == uobj.id %}
             <a class="open-VacancyAction btn btn-sm btn-outline-primary" data-toggle="modal" data-id="add_vacancy" data-target="#vacancy_modal">Добавить Вакансию</a><br><br>
             <ul class="list-group list-group-flush">
               {% for item in vacancy %}
               <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}"
+                <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.group}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}"
                 class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name }}</a>
                 <span>
                   <div class="badge badge-primary badge-pill">{{ item.date }}</div>&nbsp
@@ -204,7 +203,7 @@
             <ul class="list-group list-group-flush">
               {% for item in vacancy %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}"
+                  <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}"
                   class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name }}</a>
                   <span class="badge badge-primary badge-pill">{{ item.date }}</span>
                 </li>
@@ -215,7 +214,7 @@
           {% endif %}
           </center>
         </div>
-        <div class="tab-pane fade" id="courses" role="tabpanel" aria-labelledby="courses-tab">
+        <div class="tab-pane fade pt-3" id="courses" role="tabpanel" aria-labelledby="courses-tab">
           <center>
           {% if user.id == uobj.id %}
             <a class="btn btn-sm btn-outline-primary" href="#">Добавить Курс</a><br><br>
