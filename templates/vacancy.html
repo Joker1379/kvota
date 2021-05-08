@@ -19,20 +19,24 @@
     <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
       <div class="col p-4 d-flex flex-column position-static">
         <div class="row">
-          <div class="col">
+          <div class="col-3">
             {% if user.is_authenticated %}
-              <a class="btn btn-outline-primary" id="ButtonOverStretched" data-target="#"><b>+</b></a>
+              {% if item.1 %}
+                <a id="ButtonOverStretched"><input class="FavV" data-id="{{item.0.id}}" type="checkbox" data-toggle="toggle" data-on="+" data-off="-" data-onstyle="primary" data-offstyle="outline-success"></a>
+              {% else %}
+                <a id="ButtonOverStretched"><input class="FavV" data-id="{{item.0.id}}" type="checkbox" checked data-toggle="toggle" data-on="+" data-off="-" data-onstyle="primary" data-offstyle="outline-success"></a>
+              {% endif %}
             {% endif %}
           </div>
-          <div class="col-9"><h3 class="mb-0">{{ item.name }}</h3></div>
+          <div class="col-9"><h3 class="mb-0">{{ item.0.name }}</h3></div>
         </div>
         <div class="row">
           <div class="col"></div>
-          <div class="col-8"><div class="mb-1 text-muted">{{ item.date }}</div></div>
+          <div class="col-8"><div class="mb-1 text-muted">{{ item.0.date }}</div></div>
         </div>
         <strong class="d-inline-block mb-2 text-dark">Описание:</strong>
-        <p class="card-text mb-auto">{{ item.description|truncatechars:100 }}</p>
-        <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.group}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}"
+        <p class="card-text mb-auto">{{ item.0.description|truncatechars:100 }}</p>
+        <a data-id="{{item.0.name}}!{{item.0.date}}!{{item.0.description}}!{{item.0.education}}!{{item.0.mode}}!{{item.0.group}}!{{item.0.city}}!{{item.0.street}}!{{item.0.house}}!{{item.0.email}}!{{item.0.phone}}!{{item.0.user.username}}!{{item.0.user.id}}!{{item.0.skills}}!{{item.0.limits}}"
         class="open-VacancyInfo stretched-link" data-toggle="modal" data-target="#info_modal" href="#">Подробнее...</a>
       </div>
       <div class="col-auto d-none d-lg-block">

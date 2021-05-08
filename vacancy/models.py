@@ -21,3 +21,10 @@ class Vacancy(models.Model):
     group = models.CharField(max_length=100, blank=True, default='')
     skills = MultiSelectField(choices=S_C, blank=True)
     limits = MultiSelectField(choices=L_C, blank=True)
+
+class FavV(models.Model):
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, on_delete = models.CASCADE)
+    V = models.BooleanField(default=False)
+    U = models.BooleanField(default=False)
+    rate = models.FloatField()

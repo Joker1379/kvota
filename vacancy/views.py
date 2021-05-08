@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from users.forms import RegistrationForm, LoginForm
 from .forms import VacancySearch
-from .models import Vacancy
+from .models import Vacancy, FavV
 
 V_L = ['Требуемое образование', 'Режим работы', 'Допустимая группа инвалидности', 'Город', 'Улица', 'Строение / Расположение офиса', 'Email', 'Контактный телефон']
 
@@ -41,10 +41,14 @@ def index(request):
             data['vacancy'] = vs
             data['vlabels'] = V_L
             return render(request, 'vacancy.html', data)
+    V = []
+    for i in Vacancy.objects.all():
+        if len(FavV.objects.filter(user=request.user, vacancy=i))==0: V.insert(0, (i, False))
+        else: V.insert(0, (i, True))
     data['login'] = LoginForm()
     data['registration'] = RegistrationForm()
     data['vsform'] = VacancySearch()
-    data['vacancy'] = list(reversed(Vacancy.objects.all()))
+    data['vacancy'] = V
     data['vlabels'] = V_L
     return render(request, 'vacancy.html', data)
 
@@ -52,3 +56,15 @@ def delete(request, vid):
     vacancy = Vacancy.objects.get(id = vid)
     vacancy.delete()
     return redirect('/profile/'+str(request.user.id))
+
+def fv(request, vid, act):
+    x = FavV.objects.filter(user=request.user, vacancy=Vacancy.objects.get(id=vid))
+    if act == 1:
+        if len(x)==0:
+            fv = FavV.objects.create(user=request.user, vacancy=Vacancy.objects.get(id=vid), U=True, rate=0)
+        else:
+            x[0].U = True
+            x[0].save()
+    else:
+        x[0].delete()
+    return redirect('/')
