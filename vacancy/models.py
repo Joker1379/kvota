@@ -28,3 +28,4 @@ class FavV(models.Model):
     V = models.BooleanField(default=False)
     U = models.BooleanField(default=False)
     rate = models.FloatField()
+    note = models.CharField(max_length=50, blank=True)

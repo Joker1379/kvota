@@ -26,6 +26,7 @@ urlpatterns = [
     path('profile/<int:userid>/<str:category>/<str:item>/', uv.del_item, name = 'profile'),
     path('profile/<int:userid>/', uv.index, name = 'profile'),
     path('cources/', cv.index, name = 'cources_list'),
+    path('favorite/', vv.favorite, name = 'favorite_vacancy_list'),
     path('', vv.index, name = 'vacancy_list'),
     path('admin/', admin.site.urls),
 ]

@@ -31,7 +31,6 @@ def index(request, userid):
             vacancy.user = request.user
             vacancy.save()
         elif request.POST['action'].split('!')[0] == 'red_vacancy':
-            print(request.POST)
             vacancy = Vacancy.objects.get(id=int(request.POST['action'].split('!')[1]))
             form = VacancyForm(request.POST, instance=vacancy)
             form.save()
