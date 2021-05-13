@@ -22,9 +22,9 @@
           <div class="col-3">
             {% if user.is_authenticated %}
               {% if item.1 %}
-                <a id="ButtonOverStretched"><input class="FavV" data-id="{{item.0.id}}" type="checkbox" data-toggle="toggle" data-on="+" data-off="-" data-onstyle="primary" data-offstyle="outline-success"></a>
+                <a id="ButtonOverStretched"><input class="FavV" data-id="{{item.0.id}}!{{user.id}}!u" type="checkbox" data-toggle="toggle" data-on="+" data-off="-" data-onstyle="primary" data-offstyle="outline-success"></a>
               {% else %}
-                <a id="ButtonOverStretched"><input class="FavV" data-id="{{item.0.id}}" type="checkbox" checked data-toggle="toggle" data-on="+" data-off="-" data-onstyle="primary" data-offstyle="outline-success"></a>
+                <a id="ButtonOverStretched"><input class="FavV" data-id="{{item.0.id}}!{{user.id}}!u" type="checkbox" checked data-toggle="toggle" data-on="+" data-off="-" data-onstyle="primary" data-offstyle="outline-success"></a>
               {% endif %}
             {% endif %}
           </div>

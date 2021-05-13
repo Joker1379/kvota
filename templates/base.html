@@ -117,8 +117,9 @@
   });
   $(document).on('change', '.FavV', function () {
     let xhr = new XMLHttpRequest();
-    if ($(this).prop('checked')) xhr.open('GET', '/fv/'+$(this).data('id')+'/0');
-    else xhr.open('GET', '/fv/'+$(this).data('id')+'/1');
+    dt = $(this).data('id').split('!');
+    if ($(this).prop('checked')) xhr.open('GET', '/fv/'+dt[0]+'/'+dt[1]+'/0/'+dt[2]+'/');
+    else xhr.open('GET', '/fv/'+dt[0]+'/'+dt[1]+'/1/'+dt[2]+'/');
     xhr.send();
   });
   // Пример того, как можно назначить значение атрибута:

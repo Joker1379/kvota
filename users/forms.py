@@ -49,3 +49,16 @@ class ProfileForm(forms.ModelForm):
             'move': forms.Select(attrs={'class': 'form-control form-control-md'},
                 choices=(('-', '-'), ('Да', 'Да'), ('Нет', 'Нет'))),
             'phone': forms.TextInput(attrs={'class': 'form-control form-control-md'})}
+
+class UserSearch(forms.Form):
+    name = forms.CharField(max_length=50, label='Наименование:', required=False)
+    education = forms.CharField(max_length=100, label='Уровень Образования:', required=False)
+    group = forms.CharField(max_length=50, label='Режим Работы:', required=False)
+    city = forms.CharField(max_length=50, label='Город:', required=False)
+    street = forms.CharField(max_length=50, label='Улица:', required=False)
+    name.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
+    education.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=E_C)
+    group.widget = forms.Select(attrs={'class': 'form-control form-control-md'},
+        choices=(('-', '-'), ('1', '1'), ('2', '2'), ('3', '3')))
+    city.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
+    street.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})

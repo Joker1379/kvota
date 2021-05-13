@@ -187,7 +187,8 @@
               {% for item in vacancy %}
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.group}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}"
-                class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name }}</a>
+                class="open-VacancyInfo h5" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name|truncatechars:25 }}</a>
+                <a class="text-secondary" href="/users/{{item.id}}">Выбрать Кандидатов</a>
                 <span>
                   <div class="badge badge-primary badge-pill">{{ item.date }}</div>&nbsp
                   <a data-id="{{item.name}}!{{item.description}}!{{item.education}}!{{item.skills}}!{{item.mode}}!{{item.group}}!{{item.limits}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.id}}"
