@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Profile
-from vacancy.forms import E_C
+from vacancy.forms import E_C, G_C
 
 class RegistrationForm(UserCreationForm):
     password1 = forms.CharField(label="Пароль:", widget=forms.PasswordInput(attrs={'class':'form-control form-control-md', 'type':'password'}))
@@ -42,8 +42,7 @@ class ProfileForm(forms.ModelForm):
                 choices=(('-', '-'), ('Мужской', 'Мужской'), ('Женский', 'Женский'))),
             'age': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'education': forms.Select(attrs={'class': 'form-control form-control-md'}, choices=E_C),
-            'group': forms.Select(attrs={'class': 'form-control form-control-md'},
-                choices=(('-', '-'), ('1', '1'), ('2', '2'), ('3', '3'))),
+            'group': forms.Select(attrs={'class': 'form-control form-control-md'}, choices=G_C),
             'city': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'street': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'move': forms.Select(attrs={'class': 'form-control form-control-md'},
@@ -51,14 +50,14 @@ class ProfileForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control form-control-md'})}
 
 class UserSearch(forms.Form):
-    name = forms.CharField(max_length=50, label='Наименование:', required=False)
-    education = forms.CharField(max_length=100, label='Уровень Образования:', required=False)
-    group = forms.CharField(max_length=50, label='Режим Работы:', required=False)
+    name = forms.CharField(max_length=50, label='ФИО:', required=False)
+    education = forms.CharField(max_length=100, label='Уровень образования:', required=False)
+    group = forms.CharField(max_length=50, label='Группа инвалидности:', required=False)
     city = forms.CharField(max_length=50, label='Город:', required=False)
-    street = forms.CharField(max_length=50, label='Улица:', required=False)
+    move = forms.CharField(max_length=10, label='Готовность переезжать:', required=False)
     name.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
     education.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=E_C)
-    group.widget = forms.Select(attrs={'class': 'form-control form-control-md'},
-        choices=(('-', '-'), ('1', '1'), ('2', '2'), ('3', '3')))
+    group.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=G_C)
     city.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
-    street.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
+    move.widget = forms.Select(attrs={'class': 'form-control form-control-md'},
+        choices=(('-', '-'), ('Да', 'Да'), ('Нет', 'Нет')))

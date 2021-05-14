@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from users.forms import RegistrationForm, LoginForm, UserSearch
-from .forms import VacancySearch, E_C
+from .forms import VacancySearch, E_C, G_C
 from .models import Vacancy, FavV
 
 V_L = ['Требуемое образование', 'Режим работы', 'Допустимая группа инвалидности', 'Город', 'Улица', 'Строение / Расположение офиса', 'Email', 'Контактный телефон']
 
 def index(request):
-    data, V, v = {}, [], Vacancy.objects.all()
+    data, V, v, t = {}, [], Vacancy.objects.all(), True
     if request.method == 'POST':
         if request.POST['action'] == 'registration':
             form = RegistrationForm(request.POST)
@@ -29,24 +29,24 @@ def index(request):
             login(request, user)
             return redirect('/')
         elif request.POST['action'] == 'filter':
+            t, e, m = False, request.POST.get('education'), request.POST.get('mode')
+            if e == 'Не требуется': e = '-'
             for i in v:
                 if request.POST.get('name').lower() in i.name.lower() and request.POST.get('city').lower() in i.city.lower() and request.POST.get('street').lower() in i.street.lower():
-                    if request.POST.get('education') == '-' or request.POST.get('education') == i.education:
-                        if request.POST.get('mode') == '-' or request.POST.get('mode') == i.mode:
+                    if request.POST.get('education') == '-' or (i.education, i.education) in E_C[:E_C.index((e, e))+1]:
+                        if m == '-' or m == i.mode:
                             if len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
                             else: V.insert(0, (i, False))
-            data['login'] = LoginForm()
-            data['registration'] = RegistrationForm()
-            data['vsform'] = VacancySearch()
-            data['vacancy'] = V
-            data['vlabels'] = V_L
-            return render(request, 'vacancy.html', data)
-    for i in v:
-        if len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
-        else: V.insert(0, (i, False))
+    if t:
+        if request.user.is_authenticated:
+            for i in v:
+                if len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
+                else: V.insert(0, (i, False))
+        else:
+            for i in v: V.insert(0, (i, False))
     data['login'] = LoginForm()
     data['registration'] = RegistrationForm()
-    data['vsform'] = VacancySearch()
+    data['filter'] = VacancySearch()
     data['vacancy'] = V
     data['vlabels'] = V_L
     return render(request, 'vacancy.html', data)
@@ -80,12 +80,12 @@ def fv(request, vid, uid, act, uv):
                     if v.city == u.city: r+=1
                     if v.street == u.street: r+=1
             if uv=='u': res = FavV.objects.create(user=U, vacancy=v, U=True, rate=round(r/(6+len(sv.split(', '))), 2))
-            elif uv=='v': res = FavV.objects.create(user=U, vacancy=v, V=True, rate=round(r/(6+len(sv.split(', '))), 2))
+            else: res = FavV.objects.create(user=U, vacancy=v, V=True, rate=round(r/(6+len(sv.split(', '))), 2))
         elif uv=='u': x.update(U=True)
         else: x.update(V=True)
     else:
         if uv=='u': x.update(U=False)
-        elif uv=='v': x.update(V=False)
+        else: x.update(V=False)
         if not x[0].U and not x[0].V: x[0].delete()
     return redirect('/')
 
@@ -93,17 +93,28 @@ def favorite(request):
     data, V, v = {}, [], Vacancy.objects.all()
     for i in v:
         if len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
-    data['vsform'] = VacancySearch()
+    data['filter'] = VacancySearch()
     data['vacancy'] = V
     data['vlabels'] = V_L
     return render(request, 'vacancy.html', data)
 
-def addu(request, vid):
-    data, U, u, v = {}, [], User.objects.all(), Vacancy.objects.get(id=vid)
-    for i in u:
-        if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
-        else: U.insert(0, (i, False))
-    data['vsform'] = UserSearch()
+def addu(request, vid, mode):
+    data, U, u, v, t = {}, [], User.objects.all(), Vacancy.objects.get(id=vid), True
+    if request.method == 'POST':
+        if request.POST['action'] == 'filter':
+            t, e, m, g = False, request.POST.get('education'), request.POST.get('move'), request.POST.get('group')
+            for i in u:
+                if request.POST.get('name').lower() in i.profile.fio.lower() and request.POST.get('city').lower() in i.profile.city.lower():
+                    if g == '-' or (i.profile.group, i.profile.group) in G_C[:G_C.index((g, g))+1]:
+                        if (e, e) in E_C[:E_C.index((i.profile.education, i.profile.education))+1]:
+                            if m == '-' or m == i.profile.move:
+                                if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
+                                else: U.insert(0, (i, False))
+    if t:
+        for i in u:
+            if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
+            elif mode != 'chosen': U.insert(0, (i, False))
+    data['filter'] = UserSearch()
     data['users'] = U
     data['vid'] = vid
     return render(request, 'usersearch.html', data)

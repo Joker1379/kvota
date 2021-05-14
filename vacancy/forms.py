@@ -9,7 +9,8 @@ E_C = (('-', '-'), ('Начальное общее', 'Начальное общ�
 M_C = (('-', '-'), ('Пятидневная неделя', 'Пятидневная неделя'), ('Ненормированный рабочий день', 'Ненормированный рабочий день'),
     ('Работа по гибкому графику', 'Работа по гибкому графику'), ('Посменная работа', 'Посменная работа'),
     ('Разделение рабочего дня на части', 'Разделение рабочего дня на части'), ('Дистанционный режим', 'Дистанционный режим'))
-
+G_C = (('-', '-'), ('3', '3'), ('2', '2'), ('1', '1'))
+E_F = (E_C[0],)+(('Не требуется', 'Не требуется'),)+E_C[1:]
 
 class VacancyForm(forms.ModelForm):
     class Meta:
@@ -33,8 +34,7 @@ class VacancyForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control form-control-md'}),
             'education': forms.Select(attrs={'class': 'form-control form-control-md'}, choices=E_C),
             'mode': forms.Select(attrs={'class': 'form-control form-control-md'}, choices=M_C),
-            'group': forms.Select(attrs={'class': 'form-control form-control-md'},
-                choices=(('-', '-'), ('1', '1'), ('2', '2'), ('3', '3'))),
+            'group': forms.Select(attrs={'class': 'form-control form-control-md'}, choices=G_C),
             'city': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'street': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'house': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
@@ -43,12 +43,12 @@ class VacancyForm(forms.ModelForm):
 
 class VacancySearch(forms.Form):
     name = forms.CharField(max_length=50, label='Наименование:', required=False)
-    education = forms.CharField(max_length=100, label='Уровень Образования:', required=False)
-    mode = forms.CharField(max_length=50, label='Режим Работы:', required=False)
+    education = forms.CharField(max_length=100, label='Уровень образования:', required=False)
+    mode = forms.CharField(max_length=50, label='Режим работы:', required=False)
     city = forms.CharField(max_length=50, label='Город:', required=False)
     street = forms.CharField(max_length=50, label='Улица:', required=False)
     name.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
-    education.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=E_C)
+    education.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=E_F)
     mode.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=M_C)
     city.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
     street.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})

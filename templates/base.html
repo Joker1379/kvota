@@ -324,11 +324,12 @@
   </div>
 </div>
 
-<div class="modal fade" id="vsearch_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="filter_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="v_modal_litle">Фильтр Вакансий</h5>
+        <h5 class="modal-title" id="v_modal_litle">Фильтр</h5>
+        *(Незаполненные поля не учитываются во время фильтрации)
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -336,7 +337,7 @@
       <form method="POST" id="v_form">
         {% csrf_token %}
         <div class="modal-body">
-            {{ vsform|crispy }}
+            {{ filter|crispy }}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>

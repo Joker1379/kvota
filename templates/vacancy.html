@@ -4,13 +4,14 @@
   <div class="col-4 pt-1 pb-3">
     {% if user.is_authenticated %}
       <a class="btn btn-outline-success" href="/favorite">Избранные</a>
+      <a class="btn btn-outline-secondary" href="/">Все</a>
     {% endif %}
   </div>
   <div class="col-4 text-center">
     <!-- Search -->
   </div>
   <div class="col-4 d-flex justify-content-end pt-1 pb-3">
-    <a class="btn btn-outline-primary" data-toggle="modal" data-target="#vsearch_modal">Фильтр Вакансий</a> 
+    <a class="btn btn-outline-primary" data-toggle="modal" data-target="#filter_modal">Фильтр Вакансий</a> 
   </div>
 </div>
 <div class="row mb-2">
