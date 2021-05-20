@@ -29,7 +29,7 @@
               {% endif %}
             {% endif %}
           </div>
-          <div class="col-9"><h3 class="mb-0">{{ item.0.name }}</h3></div>
+          <div class="col-9"><h3 class="mb-0">{{ item.0.name|truncatechars:13 }}</h3></div>
         </div>
         <div class="row">
           <div class="col"></div>

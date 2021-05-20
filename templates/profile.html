@@ -187,10 +187,10 @@
               {% for item in vacancy %}
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.group}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}"
-                class="open-VacancyInfo h5" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name|truncatechars:25 }}</a>
-                <a class="text-secondary" href="/users/{{item.id}}/all">Выбрать Кандидатов</a>
+                class="open-VacancyInfo h6" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name|truncatechars:30 }}</a>
                 <span>
                   <div class="badge badge-primary badge-pill">{{ item.date }}</div>&nbsp
+                  <a class="text-info" href="/users/{{item.id}}/all">Найти работников</a>&nbsp
                   <a data-id="{{item.name}}!{{item.description}}!{{item.education}}!{{item.skills}}!{{item.mode}}!{{item.group}}!{{item.limits}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.id}}"
                   class="open-VacancyAction text-secondary" data-toggle="modal" data-target="#vacancy_modal" href=#>Изменить</a>&nbsp
                   <a class="text-danger" href="/vacancy_del/{{item.id}}">Удалить</a>

@@ -23,6 +23,7 @@ class Vacancy(models.Model):
     limits = MultiSelectField(choices=L_C, blank=True)
 
 class FavV(models.Model):
+    date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     vacancy = models.ForeignKey(Vacancy, on_delete = models.CASCADE)
     V = models.BooleanField(default=False)

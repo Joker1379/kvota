@@ -66,7 +66,7 @@ def fv(request, vid, uid, act, uv):
                 fv = FavV.objects.create(user=request.user, vacancy=Vacancy.objects.get(id=vid), U=True, rate=0, note="Неподходящая группа инвалидности")
             elif not set(lv.split(', ')).isdisjoint(set(str(u.limits).replace(';', '').lower().split(', '))):
                 fv = FavV.objects.create(user=request.user, vacancy=Vacancy.objects.get(id=vid), U=True, rate=0, note="Неподходящие физические ограничения")'''
-            if not (v.group != '-' and u.group != '-' and v.group > u.group) and set(lv.split(', ')).isdisjoint(set(str(u.limits).replace(';', '').lower().split(', '))):
+            if (v.group == '-' or u.group == '-' or v.group <= u.group) and (bool(set(lv.split(', '))) or set(lv.split(', ')).isdisjoint(set(str(u.limits).replace(';', '').lower().split(', ')))):
                 if not set(nv).isdisjoint(set(u.job_wish.lower().split('!'))): r+=1
                 if not set(nv).isdisjoint(set(u.profession.lower().split('!'))): r+=1
                 if not set(nv).isdisjoint(set(u.experience.lower().split('!'))): r+=1
@@ -118,3 +118,9 @@ def addu(request, vid, mode):
     data['users'] = U
     data['vid'] = vid
     return render(request, 'usersearch.html', data)
+
+def uni(request):
+    data, recs = {}, FavV.objects.all()
+    data['items'] = list(reversed(recs))
+    data['vlabels'] = V_L
+    return render(request, 'unidata.html', data)

@@ -28,6 +28,7 @@ urlpatterns = [
     path('profile/<int:userid>/', uv.index, name = 'profile'),
     path('cources/', cv.index, name = 'cources_list'),
     path('favorite/', vv.favorite, name = 'favorite_vacancy_list'),
+    path('uni', vv.uni, name = 'cources_base'),
     path('', vv.index, name = 'vacancy_list'),
     path('admin/', admin.site.urls),
 ]
