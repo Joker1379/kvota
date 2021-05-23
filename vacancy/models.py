@@ -18,7 +18,7 @@ class Vacancy(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     #New:
-    group = models.CharField(max_length=100, blank=True, default='')
+    group = models.CharField(max_length=10, blank=True, default='')
     skills = MultiSelectField(choices=S_C, blank=True)
     limits = MultiSelectField(choices=L_C, blank=True)
 

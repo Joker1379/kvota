@@ -29,21 +29,26 @@ def index(request):
             login(request, user)
             return redirect('/')
         elif request.POST['action'] == 'filter':
-            t, e, m = False, request.POST.get('education'), request.POST.get('mode')
+            t, e, m, s, l = False, request.POST.get('education'), request.POST.get('mode'), set(request.POST.getlist('skills')), set(request.POST.getlist('limits'))
             if e == 'Не требуется': e = '-'
             for i in v:
+                print(s, set(list(i.skills)))
                 if request.POST.get('name').lower() in i.name.lower() and request.POST.get('city').lower() in i.city.lower() and request.POST.get('street').lower() in i.street.lower():
                     if request.POST.get('education') == '-' or (i.education, i.education) in E_C[:E_C.index((e, e))+1]:
-                        if m == '-' or m == i.mode:
-                            if len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
-                            else: V.insert(0, (i, False))
-    if t:
-        if request.user.is_authenticated:
+                        if (m == '-' or m == i.mode) and (request.POST.get('group') == '-' or request.POST.get('group') >= i.group):
+                            if s.issubset(set(list(i.skills))) and l.isdisjoint(set(list(i.limits))):
+                                if request.user.is_authenticated and len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
+                                else: V.insert(0, (i, False))
+        elif request.POST['action'] == 'search':
+            t, sd = False, request.POST['search'].lower()
             for i in v:
-                if len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
-                else: V.insert(0, (i, False))
-        else:
-            for i in v: V.insert(0, (i, False))
+                if sd in i.name.lower() or sd in i.description.lower():
+                    if request.user.is_authenticated and len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
+                    else: V.insert(0, (i, False))
+    if t:
+        for i in v:
+            if request.user.is_authenticated and len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
+            else: V.insert(0, (i, False))
     data['login'] = LoginForm()
     data['registration'] = RegistrationForm()
     data['filter'] = VacancySearch()
