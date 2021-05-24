@@ -23,16 +23,13 @@ def index(request):
                 login(request, user)
                 return redirect('/')
         elif request.POST['action'] == 'login':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = authenticate(username=username, password=password)
+            user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
             login(request, user)
             return redirect('/')
         elif request.POST['action'] == 'filter':
             t, e, m, s, l = False, request.POST.get('education'), request.POST.get('mode'), set(request.POST.getlist('skills')), set(request.POST.getlist('limits'))
             if e == 'Не требуется': e = '-'
             for i in v:
-                print(s, set(list(i.skills)))
                 if request.POST.get('name').lower() in i.name.lower() and request.POST.get('city').lower() in i.city.lower() and request.POST.get('street').lower() in i.street.lower():
                     if request.POST.get('education') == '-' or (i.education, i.education) in E_C[:E_C.index((e, e))+1]:
                         if (m == '-' or m == i.mode) and (request.POST.get('group') == '-' or request.POST.get('group') >= i.group):
@@ -66,26 +63,20 @@ def fv(request, vid, uid, act, uv):
     x = FavV.objects.filter(user=U, vacancy=v)
     if act == 1:
         if len(x)==0:
-            r, lv, sv, nv = 0, str(v.limits).replace(';', '').lower(), str(v.skills).replace(';', '').lower(), v.name.lower().split()
-            '''if v.group != '-' and u.group != '-' and v.group > u.group:
-                fv = FavV.objects.create(user=request.user, vacancy=Vacancy.objects.get(id=vid), U=True, rate=0, note="Неподходящая группа инвалидности")
-            elif not set(lv.split(', ')).isdisjoint(set(str(u.limits).replace(';', '').lower().split(', '))):
-                fv = FavV.objects.create(user=request.user, vacancy=Vacancy.objects.get(id=vid), U=True, rate=0, note="Неподходящие физические ограничения")'''
-            if (v.group == '-' or u.group == '-' or v.group <= u.group) and (bool(set(lv.split(', '))) or set(lv.split(', ')).isdisjoint(set(str(u.limits).replace(';', '').lower().split(', ')))):
-                if not set(nv).isdisjoint(set(u.job_wish.lower().split('!'))): r+=1
-                if not set(nv).isdisjoint(set(u.profession.lower().split('!'))): r+=1
-                if not set(nv).isdisjoint(set(u.experience.lower().split('!'))): r+=1
-                if sv == '': r+=1
-                else:
-                    for i in sv.split(', '):
-                        if not set([i]).isdisjoint(set(str(u.skills).replace(';', '').lower().split(', '))): r+=1
+            r, lv, sv, nv = 0, set(list(v.limits)), list(v.skills), set(v.name.lower().split())
+            if (v.group == '-' or u.group == '-' or v.group <= u.group) and (len(lv) == 0 or lv.isdisjoint(set(list(u.limits)))):
+                if not nv.isdisjoint(set(u.job_wish.lower().split('!'))): r+=1
+                if not nv.isdisjoint(set(u.profession.lower().split('!'))): r+=1
+                if not nv.isdisjoint(set(u.experience.lower().split('!'))): r+=1
+                for i in sv:
+                    if i in list(u.skills): r+=1
                 if (v.education, v.education) in E_C[:E_C.index((u.education, u.education))+1]: r+=1
                 if u.move == 'Да' or v.city == '': r+=2
                 else:
                     if v.city == u.city: r+=1
                     if v.street == u.street: r+=1
-            if uv=='u': res = FavV.objects.create(user=U, vacancy=v, U=True, rate=round(r/(6+len(sv.split(', '))), 2))
-            else: res = FavV.objects.create(user=U, vacancy=v, V=True, rate=round(r/(6+len(sv.split(', '))), 2))
+            if uv=='u': res = FavV.objects.create(user=U, vacancy=v, U=True, rate=round(r/(6+len(sv)), 2))
+            else: res = FavV.objects.create(user=U, vacancy=v, V=True, rate=round(r/(6+len(sv)), 2))
         elif uv=='u': x.update(U=True)
         else: x.update(V=True)
     else:
@@ -104,7 +95,7 @@ def favorite(request):
     return render(request, 'vacancy.html', data)
 
 def addu(request, vid, mode):
-    data, U, u, v, t = {}, [], User.objects.all(), Vacancy.objects.get(id=vid), True
+    data, U, u, v, t, s, l = {}, [], User.objects.all(), Vacancy.objects.get(id=vid), True, set(request.POST.getlist('skills')), set(request.POST.getlist('limits'))
     if request.method == 'POST':
         if request.POST['action'] == 'filter':
             t, e, m, g = False, request.POST.get('education'), request.POST.get('move'), request.POST.get('group')
@@ -112,7 +103,7 @@ def addu(request, vid, mode):
                 if request.POST.get('name').lower() in i.profile.fio.lower() and request.POST.get('city').lower() in i.profile.city.lower():
                     if g == '-' or (i.profile.group, i.profile.group) in G_C[:G_C.index((g, g))+1]:
                         if (e, e) in E_C[:E_C.index((i.profile.education, i.profile.education))+1]:
-                            if m == '-' or m == i.profile.move:
+                            if (m == '-' or m == i.profile.move) and s.issubset(set(list(i.profile.skills))) and l.isdisjoint(set(list(i.profile.limits))):
                                 if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
                                 else: U.insert(0, (i, False))
     if t:

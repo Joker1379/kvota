@@ -2,7 +2,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Profile
+from multiselectfield import MultiSelectFormField
 from vacancy.forms import E_C, G_C
+from vacancy.models import S_C, L_C
 
 class RegistrationForm(UserCreationForm):
     password1 = forms.CharField(label="Пароль:", widget=forms.PasswordInput(attrs={'class':'form-control form-control-md', 'type':'password'}))
@@ -52,7 +54,9 @@ class ProfileForm(forms.ModelForm):
 class UserSearch(forms.Form):
     name = forms.CharField(max_length=50, label='ФИО:', required=False)
     education = forms.CharField(max_length=100, label='Уровень образования:', required=False)
-    group = forms.CharField(max_length=50, label='Группа инвалидности:', required=False)
+    skills = MultiSelectFormField(choices=S_C, label='Желательные навыки:', required=False)
+    group = forms.CharField(max_length=50, label='Допустимая группа инвалидности:', required=False)
+    limits = MultiSelectFormField(choices=L_C, label='Недопустимые ограничения:', required=False)
     city = forms.CharField(max_length=50, label='Город:', required=False)
     move = forms.CharField(max_length=10, label='Готовность переезжать:', required=False)
     name.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
