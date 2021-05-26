@@ -36,6 +36,13 @@ def index(request):
                             if s.issubset(set(list(i.skills))) and l.isdisjoint(set(list(i.limits))):
                                 if request.user.is_authenticated and len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
                                 else: V.insert(0, (i, False))
+        elif request.POST['action'] == 'suitable':
+            t, u = False, request.user.profile
+            for i in v:
+                if (i.education, i.education) in E_C[:E_C.index((u.education, u.education))+1]:
+                    if (u.group == '-' or u.group >= i.group) and set(list(u.limits)).isdisjoint(set(list(i.limits))):
+                        if len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
+                        else: V.insert(0, (i, False))
         elif request.POST['action'] == 'search':
             t, sd = False, request.POST['search'].lower()
             for i in v:
@@ -106,6 +113,13 @@ def addu(request, vid, mode):
                             if (m == '-' or m == i.profile.move) and s.issubset(set(list(i.profile.skills))) and l.isdisjoint(set(list(i.profile.limits))):
                                 if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
                                 else: U.insert(0, (i, False))
+        elif request.POST['action'] == 'suitable':
+            t = False
+            for i in u:
+                if (v.education, v.education) in E_C[:E_C.index((i.profile.education, i.profile.education))+1]:
+                    if (i.profile.group == '-' or i.profile.group >= v.group) and set(list(v.limits)).isdisjoint(set(list(i.profile.limits))):
+                        if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
+                        else: U.insert(0, (i, False))
     if t:
         for i in u:
             if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))

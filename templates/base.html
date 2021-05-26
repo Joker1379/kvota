@@ -347,8 +347,13 @@
             {{ filter|crispy }}
         </div>
         <div class="modal-footer">
+          {% if user.is_authenticated and request.path == '/' %}
+            <button type="submit" class="btn btn-success" name="action" value="suitable">Подходящие мне</button>
+          {% elif user.is_authenticated %}
+            <button type="submit" class="btn btn-success" name="action" value="suitable">Подходящие для данной вакансии</button>
+          {% endif %}
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-          <button type="submit" class="btn btn-primary" name = "action" value = "filter">Принять</button>
+          <button type="submit" class="btn btn-primary" name="action" value="filter">Принять</button>
         </div>
       </form>
     </div>
