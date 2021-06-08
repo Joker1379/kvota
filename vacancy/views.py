@@ -21,10 +21,10 @@ def index(request):
                 raw_password = form.cleaned_data.get('password1')
                 user = authenticate(username=user.username, password=raw_password)
                 login(request, user)
-                return redirect('/')
+            return redirect('/')
         elif request.POST['action'] == 'login':
             user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
-            login(request, user)
+            if user: login(request, user)
             return redirect('/')
         elif request.POST['action'] == 'filter':
             t, e, m, s, l = False, request.POST.get('education'), request.POST.get('mode'), set(request.POST.getlist('skills')), set(request.POST.getlist('limits'))
