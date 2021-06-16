@@ -9,6 +9,7 @@ class Vacancy(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     date = models.DateField(auto_now_add=True)
     name = models.CharField(max_length=50)
+    wage = models.PositiveIntegerField(default=0)
     description = models.TextField()
     education = models.CharField(max_length=100)
     mode = models.CharField(max_length=50)
@@ -17,7 +18,6 @@ class Vacancy(models.Model):
     house = models.CharField(max_length=50, blank=True)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
-    #New:
     group = models.CharField(max_length=10, blank=True, default='')
     skills = MultiSelectField(choices=S_C, blank=True)
     limits = MultiSelectField(choices=L_C, blank=True)

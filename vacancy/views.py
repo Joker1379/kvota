@@ -27,13 +27,14 @@ def index(request):
             if user: login(request, user)
             return redirect('/')
         elif request.POST['action'] == 'filter':
-            t, e, m, s, l = False, request.POST.get('education'), request.POST.get('mode'), set(request.POST.getlist('skills')), set(request.POST.getlist('limits'))
+            t, e, m, s, l, w = False, request.POST.get('education'), request.POST.get('mode'), set(request.POST.getlist('skills')), set(request.POST.getlist('limits')), request.POST.get('wage')
             if e == 'Не требуется': e = '-'
+            if w == '': w = 0
             for i in v:
                 if request.POST.get('name').lower() in i.name.lower() and request.POST.get('city').lower() in i.city.lower() and request.POST.get('street').lower() in i.street.lower():
                     if request.POST.get('education') == '-' or (i.education, i.education) in E_C[:E_C.index((e, e))+1]:
                         if (m == '-' or m == i.mode) and (request.POST.get('group') == '-' or request.POST.get('group') >= i.group):
-                            if s.issubset(set(list(i.skills))) and l.isdisjoint(set(list(i.limits))):
+                            if s.issubset(set(list(i.skills))) and l.isdisjoint(set(list(i.limits))) and i.wage >= int(w):
                                 if request.user.is_authenticated and len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
                                 else: V.insert(0, (i, False))
         elif request.POST['action'] == 'suitable':

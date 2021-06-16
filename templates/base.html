@@ -68,6 +68,8 @@
   $(document).on("click", ".open-VacancyInfo", function () {
     var data = $(this).data('id').split("!");
     $(".modal-content #name").html(data[0]);
+    if (data[15] == '0') $(".modal-content #wage").html('Зарплата не указана');
+    else $(".modal-content #wage").html(data[15]+'р.');
     $(".modal-content #date").html(data[1]);
     $(".modal-content #description").html(data[2]);
     $(".modal-content #education").html(data[3]);
@@ -95,6 +97,7 @@
     var action = $(this).data('id');
     if (action == "add_vacancy"){
       $('#v_form [name=name]').val('');
+      $('#v_form [name=wage]').val(0);
       $('#v_form [name=description]').val('');
       $('#v_form [name=education]').val('-');
       $('#v_form [name=mode]').val('-');
@@ -108,6 +111,7 @@
     } else {
       data = action.split('!');
       $('#v_form [name=name]').val(data[0]);
+      $('#v_form [name=wage]').val(data[13]);
       $('#v_form [name=description]').val(data[1]);
       $('#v_form [name=education]').val(data[2]);
       $('#v_form [name=skills]').val(data[3].split(', '));
@@ -267,7 +271,8 @@
           <div class="col-md-8 pt-5">
             <center>
               <h2><label id="name"></label></h2>
-              <label class="badge badge-primary badge-pill" id="date"></label><br><br>
+              <label class="badge badge-primary badge-pill" id="date"></label><br>
+              <strong><label id="wage"></label></strong><br>
               <a id="v_username" href=""></a>
             </center>
           </div>

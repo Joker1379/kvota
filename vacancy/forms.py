@@ -15,9 +15,10 @@ E_F = (E_C[0],)+(('Не требуется', 'Не требуется'),)+E_C[1:
 class VacancyForm(forms.ModelForm):
     class Meta:
         model = Vacancy
-        fields = ('name', 'description', 'education', 'skills', 'mode', 'group', 'limits', 'city', 'street', 'house', 'email', 'phone')
+        fields = ('name', 'wage', 'description', 'education', 'skills', 'mode', 'group', 'limits', 'city', 'street', 'house', 'email', 'phone')
         labels = {
             'name': 'Наименование вакансии:',
+            'wage': 'Предлагаемая зарплата:',
             'description': 'Описание:',
             'education': 'Требуемое образование:',
             'skills': 'Желательные навыки:',
@@ -31,6 +32,7 @@ class VacancyForm(forms.ModelForm):
             'phone': 'Контактный телефон:'}
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
+            'wage': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'description': forms.Textarea(attrs={'class': 'form-control form-control-md'}),
             'education': forms.Select(attrs={'class': 'form-control form-control-md'}, choices=E_C),
             'mode': forms.Select(attrs={'class': 'form-control form-control-md'}, choices=M_C),
@@ -43,6 +45,7 @@ class VacancyForm(forms.ModelForm):
 
 class VacancySearch(forms.Form):
     name = forms.CharField(max_length=50, label='Наименование:', required=False)
+    wage = forms.IntegerField(min_value=0, label='Минимальная зарплата:', required=False)
     education = forms.CharField(max_length=100, label='Уровень образования:', required=False)
     skills = MultiSelectFormField(choices=S_C, label='Желательные навыки:', required=False)
     mode = forms.CharField(max_length=50, label='Режим работы:', required=False)
@@ -51,6 +54,7 @@ class VacancySearch(forms.Form):
     city = forms.CharField(max_length=50, label='Город:', required=False)
     street = forms.CharField(max_length=50, label='Улица:', required=False)
     name.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
+    wage.widget = forms.NumberInput(attrs={'class': 'form-control form-control-md'})
     education.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=E_F)
     mode.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=M_C)
     group.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=G_C)

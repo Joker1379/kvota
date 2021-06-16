@@ -30,7 +30,13 @@
     <div class="col">
       <p><strong>ФИО:</strong> {{i.0.profile.fio}}</p>
       <p><strong>Пол:</strong> {{i.0.profile.sex}}</p>
-      <p><strong>Возраст:</strong> {{i.0.profile.age}}</p>
+      <p><strong>Возраст:</strong>
+        {% if i.0.profile.age == 0 %}
+          -
+        {% else %}
+          {{i.0.profile.age}}
+        {% endif %}
+      </p>
       <p><strong>Образование:</strong> {{i.0.profile.education}}</p>
       <p><strong>Город:</strong> {{i.0.profile.city}}</p>
     </div>

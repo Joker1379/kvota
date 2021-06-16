@@ -35,17 +35,23 @@
           </div>
           <div class="col-9"><h3 class="mb-0">{{ item.0.name|truncatechars:13 }}</h3></div>
         </div>
-        <div class="row">
-          <div class="col"></div>
-          <div class="col-8"><div class="mb-1 text-muted">{{ item.0.date }}</div></div>
+        <div class="row pl-3 justify-content-center">
+          <div class="mb-1 text-muted">{{ item.0.date }}</div>
+        </div>
+        <div class="row pl-3 justify-content-center">
+          {% if item.0.wage == 0 %}
+            Зарплата не указана
+          {% else %}
+            <strong>{{ item.0.wage }}р.</strong>
+          {% endif %}
         </div>
         <strong class="d-inline-block mb-2 text-dark">Описание:</strong>
         <p class="card-text mb-auto">{{ item.0.description|truncatechars:100 }}</p>
-        <a data-id="{{item.0.name}}!{{item.0.date}}!{{item.0.description}}!{{item.0.education}}!{{item.0.mode}}!{{item.0.group}}!{{item.0.city}}!{{item.0.street}}!{{item.0.house}}!{{item.0.email}}!{{item.0.phone}}!{{item.0.user.username}}!{{item.0.user.id}}!{{item.0.skills}}!{{item.0.limits}}"
+        <a data-id="{{item.0.name}}!{{item.0.date}}!{{item.0.description}}!{{item.0.education}}!{{item.0.mode}}!{{item.0.group}}!{{item.0.city}}!{{item.0.street}}!{{item.0.house}}!{{item.0.email}}!{{item.0.phone}}!{{item.0.user.username}}!{{item.0.user.id}}!{{item.0.skills}}!{{item.0.limits}}!{{ item.0.wage }}"
         class="open-VacancyInfo stretched-link" data-toggle="modal" data-target="#info_modal" href="#">Подробнее...</a>
       </div>
       <div class="col-auto d-none d-lg-block">
-        <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/></svg>
+        <svg class="bd-placeholder-img" width="200" height="270" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/></svg>
       </div>
     </div>
   </div>
