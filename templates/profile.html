@@ -204,7 +204,7 @@
             <ul class="list-group list-group-flush">
               {% for item in vacancy %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}!{{item.wage}}"
+                  <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.group}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}!{{item.wage}}"
                   class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name }}</a>
                   <span class="badge badge-primary badge-pill">{{ item.date }}</span>
                 </li>
