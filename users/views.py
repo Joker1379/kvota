@@ -1,7 +1,9 @@
+import json
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from .forms import ProfileForm
+from .forms import RegistrationForm, LoginForm, ProfileForm, ERR
 from vacancy.models import Vacancy
 from vacancy.forms import VacancyForm
 from vacancy.views import V_L
@@ -62,3 +64,23 @@ def del_item(request, userid, category, item):
 def exit(request):
     logout(request)
     return redirect('/')
+
+def RV(request):
+    form = RegistrationForm(request.POST)
+    t = 1 if form.is_valid() else 0
+    s, r, l = str(form.errors), '<br><ul class="errorlist">', request.POST['username']
+    if len(l) < 4: t, r = 0, r+'<li>'+'Логин слишком короткий (минимум 4 символа);'+'</li>'
+    if not l.isalnum(): t, r = 0, r+'<li>'+'Логин может включать в себя только буквы или цифры;'+'</li>'
+    for i in ERR:
+        if i[0] in s: r+='<li>'+i[1]+'</li>'
+    if t == 1:
+        user = form.save()
+        # Так сожраняются дополнительные поля профиля при регистрации:
+        # user.refresh_from_db()
+        # user.profile.sex = form.cleaned_data.get('sex')
+        # user.save()
+        raw_password = form.cleaned_data.get('password1')
+        user = authenticate(username=user.username, password=raw_password)
+        login(request, user)
+    if r == '<br><ul class="errorlist">': r = ''
+    return HttpResponse(json.dumps({'v': t, 'errors': r}))

@@ -21,6 +21,7 @@ from users import views as uv
 
 urlpatterns = [
     path('exit/', uv.exit, name = 'logout'),
+    path('RV/', uv.RV, name = 'reg_val'),
     path('fv/<int:vid>/<int:uid>/<int:act>/<str:uv>/', vv.fv, name = 'fav_vacancy_action'),
     path('vacancy_del/<int:vid>/', vv.delete, name = 'delete_vacancy'),
     path('users/<int:vid>/<str:mode>/', vv.addu, name = 'add_users_to_vacancy'),

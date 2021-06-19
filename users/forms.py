@@ -6,6 +6,14 @@ from multiselectfield import MultiSelectFormField
 from vacancy.forms import E_C, G_C
 from vacancy.models import S_C, L_C
 
+ERR = (
+    ('A user with that username already exists.', 'Пользователь с таким Логином уже существует;'),
+    ('This password is too short. It must contain at least 8 characters.', 'Пароль слишком короткий (минимум 8 символов);'),
+    ('This password is too common.', 'Пароль слишком простой;'),
+    ('This password is entirely numeric.', 'Пароль не должен состоять из одних цифр;'),
+    ('The two password fields didn’t match.', 'Указанные Пароли не совпадают;'),
+    ('The password is too similar to the username.', 'Логин и Пароль слишком схожи;'),)
+
 class RegistrationForm(UserCreationForm):
     password1 = forms.CharField(label="Пароль:", widget=forms.PasswordInput(attrs={'class':'form-control form-control-md', 'type':'password'}))
     password2 = forms.CharField(label="Повторите Пароль:", widget=forms.PasswordInput(attrs={'class':'form-control form-control-md', 'type':'password'}))

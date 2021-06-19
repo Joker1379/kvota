@@ -10,6 +10,7 @@ V_L = ['Требуемое образование', 'Режим работы', '
 def index(request):
     data, V, v, t = {}, [], Vacancy.objects.all(), True
     if request.method == 'POST':
+        print(request.POST)
         if request.POST['action'] == 'registration':
             form = RegistrationForm(request.POST)
             if form.is_valid():
