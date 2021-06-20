@@ -21,6 +21,8 @@ class Profile(models.Model):
     experience = models.CharField(max_length=300, blank=True, default='')
     skills = MultiSelectField(choices=S_C, blank=True)
     limits = MultiSelectField(choices=L_C, blank=True)
+    def s_list(self): return str(self.skills).split(',')[:3]
+    def l_list(self): return str(self.limits).split(',')[:3]
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):

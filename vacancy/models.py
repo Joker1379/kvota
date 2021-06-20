@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from multiselectfield import MultiSelectField
 
 S_C= (('Умение Работать в Команде;', 'Умение Работать в Команде;'), ('git;', 'git;'), ('Проведение Уроков;', 'Проведение Уроков;'))
-L_C=(('Ограничение 1;', 'Ограничение 1;'), ('Ограничение 2;', 'Ограничение 2;'), ('Ограничение 3;', 'Ограничение 3;'))
+L_C=(('Речевые ограничения;', 'Речевые ограничения;'), ('Слабый слух;', 'Слабый слух;'), ('Нарушенная координация;', 'Нарушенная координация;'))
 
 class Vacancy(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
@@ -16,6 +16,7 @@ class Vacancy(models.Model):
     city = models.CharField(max_length=50, blank=True)
     street = models.CharField(max_length=50, blank=True)
     house = models.CharField(max_length=50, blank=True)
+    apartment = models.CharField(max_length=10, blank=True)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     group = models.CharField(max_length=10, blank=True, default='')

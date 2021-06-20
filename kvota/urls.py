@@ -20,16 +20,16 @@ from cources import views as cv
 from users import views as uv
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('registration/', uv.registration, name = 'registration'),
+    path('login/', uv.login, name = 'login'),
     path('exit/', uv.exit, name = 'logout'),
-    path('RV/', uv.RV, name = 'reg_val'),
-    path('fv/<int:vid>/<int:uid>/<int:act>/<str:uv>/', vv.fv, name = 'fav_vacancy_action'),
-    path('vacancy_del/<int:vid>/', vv.delete, name = 'delete_vacancy'),
-    path('users/<int:vid>/<str:mode>/', vv.addu, name = 'add_users_to_vacancy'),
-    path('profile/<int:userid>/<str:category>/<str:item>/', uv.del_item, name = 'profile'),
+    path('profile/<int:userid>/<str:category>/<str:item>/', uv.del_item, name = 'delete_speciality'),
     path('profile/<int:userid>/', uv.index, name = 'profile'),
     path('cources/', cv.index, name = 'cources_list'),
-    path('favorite/', vv.favorite, name = 'favorite_vacancy_list'),
-    path('uni', vv.uni, name = 'cources_base'),
-    path('', vv.index, name = 'vacancy_list'),
-    path('admin/', admin.site.urls),
-]
+    path('ea/<int:vid>/<int:uid>/<int:act>/<str:uv>/', vv.EvalAction, name = 'evaluation_action'),
+    path('data/', vv.DataDemo, name = 'generated_data_demonstration'),
+    path('users/<int:vid>/<str:mode>/', vv.addu, name = 'users_list_for_vacancy'),
+    path('vdelete/<int:vid>/', vv.delete, name = 'delete_vacancy'),
+    path('vfavorites/', vv.favorites, name = 'favorites_vacancy_list'),
+    path('', vv.index, name = 'vacancy_list')]

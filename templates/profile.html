@@ -16,11 +16,11 @@
     </div>
     <div class="col-md">
       <div class="profile-head">
-        <h5>
+        <h1>
         {{ uobj.username }}
-        </h5>
+        </h1>
         <h6>
-          <span><strong>Желаемые cпециальности: </strong></span>
+          <span><strong>Желаемые cпециальности:</strong></span>
           {% if user.id == uobj.id %}
             {% for i in wish %}
               <a href="/profile/{{user.id}}/wish/{{i}}"><span class="badge badge-success">{{ i }}</span></a>
@@ -33,7 +33,7 @@
           {% endif %}
         </h6>
         <h6>
-          <span><strong>Полученные специальности: </strong></span>
+          <span><strong>Полученные специальности:</strong></span>
           {% if user.id == uobj.id %}
             {% for i in profession %}
               <a href="/profile/{{user.id}}/profession/{{i}}"><span class="badge badge-warning">{{ i }}</span></a>
@@ -46,7 +46,7 @@
           {% endif %}
         </h6>
         <h6>
-          <span><strong>Опыт: </strong></span>
+          <span><strong>Опыт:</strong></span>
           {% if user.id == uobj.id %}
             {% for i in experience %}
               <a href="/profile/{{user.id}}/experience/{{i}}"><span class="badge badge-primary">{{ i }}</span></a>
@@ -60,13 +60,13 @@
         </h6>
         <hr>
         <h6>
-          <span><strong>Навыки: </strong></span>
+          <span><strong>Навыки:</strong></span>
           {% for i in uobj.profile.skills %}
             <span class="badge badge-info">{{ i|slice:":-1" }}</span>
           {% endfor %}
         </h6>
         <h6>
-          <span><strong>Ограничения: </strong></span>
+          <span><strong>Физические ограничения:</strong></span>
           {% for i in uobj.profile.limits %}
             <span class="badge badge-danger">{{ i|slice:":-1" }}</span>
           {% endfor %}
@@ -100,7 +100,7 @@
     <div class="col-md-8">
       <div class="tab-content profile-tab" id="profile_tab_content">
         <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
-          <div class="row">
+          <div class="row pt-3">
             <div class="col-md-6">
               <label>ФИО:</label>
             </div>
@@ -186,14 +186,14 @@
             <ul class="list-group list-group-flush">
               {% for item in vacancy %}
               <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.group}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}!{{item.wage}}"
+                <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.group}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}!{{item.wage}}!{{item.apartment}}"
                 class="open-VacancyInfo h6" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name|truncatechars:30 }}</a>
                 <span>
                   <div class="badge badge-primary badge-pill">{{ item.date }}</div>&nbsp
                   <a class="text-info" href="/users/{{item.id}}/all">Найти работников</a>&nbsp
-                  <a data-id="{{item.name}}!{{item.description}}!{{item.education}}!{{item.skills}}!{{item.mode}}!{{item.group}}!{{item.limits}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.id}}!{{item.wage}}"
+                  <a data-id="{{item.name}}!{{item.description}}!{{item.education}}!{{item.skills}}!{{item.mode}}!{{item.group}}!{{item.limits}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.id}}!{{item.wage}}!{{item.apartment}}"
                   class="open-VacancyAction text-secondary" data-toggle="modal" data-target="#vacancy_modal" href=#>Изменить</a>&nbsp
-                  <a class="text-danger" href="/vacancy_del/{{item.id}}">Удалить</a>
+                  <a class="text-danger" href="/vdelete/{{item.id}}">Удалить</a>
                 </span>
               </li>
               {% empty %}
@@ -204,7 +204,7 @@
             <ul class="list-group list-group-flush">
               {% for item in vacancy %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.group}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}!{{item.wage}}"
+                  <a data-id="{{item.name}}!{{item.date}}!{{item.description}}!{{item.education}}!{{item.mode}}!{{item.group}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.user.username}}!{{item.user.id}}!{{item.skills}}!{{item.limits}}!{{item.wage}}!{{item.apartment}}"
                   class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name }}</a>
                   <span class="badge badge-primary badge-pill">{{ item.date }}</span>
                 </li>

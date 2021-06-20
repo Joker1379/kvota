@@ -10,12 +10,13 @@ M_C = (('-', '-'), ('Пятидневная неделя', 'Пятидневна
     ('Работа по гибкому графику', 'Работа по гибкому графику'), ('Посменная работа', 'Посменная работа'),
     ('Разделение рабочего дня на части', 'Разделение рабочего дня на части'), ('Дистанционный режим', 'Дистанционный режим'))
 G_C = (('-', '-'), ('3', '3'), ('2', '2'), ('1', '1'))
+A_C = (('-', '-'), ('Да', 'Да'), ('Нет', 'Нет'))
 E_F = (E_C[0],)+(('Не требуется', 'Не требуется'),)+E_C[1:]
 
 class VacancyForm(forms.ModelForm):
     class Meta:
         model = Vacancy
-        fields = ('name', 'wage', 'description', 'education', 'skills', 'mode', 'group', 'limits', 'city', 'street', 'house', 'email', 'phone')
+        fields = ('name', 'wage', 'description', 'education', 'skills', 'mode', 'group', 'limits', 'city', 'street', 'house', 'apartment', 'email', 'phone')
         labels = {
             'name': 'Наименование вакансии:',
             'wage': 'Предлагаемая зарплата:',
@@ -28,6 +29,7 @@ class VacancyForm(forms.ModelForm):
             'city': 'Город:',
             'street': 'Улица:',
             'house': 'Строение / Расположение офиса:',
+            'apartment': 'Предоставление жилья:',
             'email': 'Email:',
             'phone': 'Контактный телефон:'}
         widgets = {
@@ -40,6 +42,7 @@ class VacancyForm(forms.ModelForm):
             'city': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'street': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'house': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
+            'apartment': forms.Select(attrs={'class': 'form-control form-control-md'}, choices=A_C),
             'email': forms.TextInput(attrs={'class': 'form-control form-control-md'}),
             'phone': forms.TextInput(attrs={'class': 'form-control form-control-md'})}
 
@@ -53,6 +56,7 @@ class VacancySearch(forms.Form):
     limits = MultiSelectFormField(choices=L_C, label='Допустимые ограничения:', required=False)
     city = forms.CharField(max_length=50, label='Город:', required=False)
     street = forms.CharField(max_length=50, label='Улица:', required=False)
+    apartment = forms.CharField(max_length=10, label='Предоставление жилья:', required=False)
     name.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
     wage.widget = forms.NumberInput(attrs={'class': 'form-control form-control-md'})
     education.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=E_F)
@@ -60,3 +64,4 @@ class VacancySearch(forms.Form):
     group.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=G_C)
     city.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
     street.widget = forms.TextInput(attrs={'class': 'form-control form-control-md'})
+    apartment.widget = forms.Select(attrs={'class': 'form-control form-control-md'}, choices=A_C)

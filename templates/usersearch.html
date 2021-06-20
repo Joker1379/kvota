@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row flex-nowrap justify-content-between align-items-center">
-  <div class="col-4 pt-1 pb-3">
+  <div class="col pt-1 pb-3">
     {% if user.is_authenticated %}
-      <a class="btn btn-outline-success" href="/users/{{vid}}/chosen">Выбранные</a>
-      <a class="btn btn-outline-secondary" href="/users/{{vid}}/all">Все</a>
+      <a class="btn btn-outline-warning" href="/users/{{vid}}/chosen">Выбранные кандидаты</a>
+      <a class="btn btn-outline-primary" href="/users/{{vid}}/all">Все</a>
     {% endif %}
   </div>
-  <div class="col-4 text-center">
+  <div class="col text-center">
     <!-- Search -->
   </div>
   <div class="col-4 d-flex justify-content-end pt-1 pb-3">
@@ -15,19 +15,37 @@
   </div>
 </div>
 {% for i in users %}
-  <div class="row flex-nowrap justify-content-between align-items-center pt-3">
-    <div class="col d-flex justify-content-center">
-      {% if i.1 %}
-        <input class="FavV" data-id="{{vid}}!{{i.0.id}}!v" type="checkbox" data-toggle="toggle" data-on="+" data-off="-" data-onstyle="primary" data-offstyle="outline-success">
-      {% else %}
-        <input class="FavV" data-id="{{vid}}!{{i.0.id}}!v" type="checkbox" checked data-toggle="toggle" data-on="+" data-off="-" data-onstyle="primary" data-offstyle="outline-success">
-      {% endif %}
+  <div class="row flex-nowrap justify-content-between pt-3">
+    <div class="col justify-content-center pl-5">
+      <div class="row pl-3">
+        <div class="col-3 d-flex justify-content-end pr-5 pt-2">
+          {% if i.1 %}
+            <input class="FavV star align-top" type="checkbox" data-id="{{vid}}!{{i.0.id}}!v" onchange="FavV(this);">
+          {% else %}
+            <input class="FavV star align-top" type="checkbox" data-id="{{vid}}!{{i.0.id}}!v" onchange="FavV(this);" checked>
+          {% endif %}
+        </div>
+        <div class="col pt-3">
+          <a class="h5" href="/profile/{{i.0.id}}">{{i.0.username}}</a>
+          <div class="mb-1 text-muted">{{ i.0.date_joined }}</div>
+        </div>
+      </div>
+      <div class="row pt-5 pl-5">
+        <h6>
+        {% for i in i.0.profile.s_list %}
+          <span class="badge badge-info">{{ i|slice:":-1" }}</span>
+        {% endfor %}
+        </h6>
+      </div>
+      <div class="row pt-1 pl-5">
+        <h6>
+        {% for i in i.0.profile.l_list %}
+          <span class="badge badge-danger">{{ i|slice:":-1" }}</span>
+        {% endfor %}
+        </h6>
+      </div>
     </div>
-    <div class="col">
-      <a class="h5" href="/profile/{{i.0.id}}">{{i.0.username}}</a>
-      <div class="mb-1 text-muted">{{ i.0.date_joined }}</div>
-    </div>
-    <div class="col">
+    <div class="col-md-4">
       <p><strong>ФИО:</strong> {{i.0.profile.fio}}</p>
       <p><strong>Пол:</strong> {{i.0.profile.sex}}</p>
       <p><strong>Возраст:</strong>
@@ -40,7 +58,7 @@
       <p><strong>Образование:</strong> {{i.0.profile.education}}</p>
       <p><strong>Город:</strong> {{i.0.profile.city}}</p>
     </div>
-    <div class="col">
+    <div class="col-3">
       {% load static %}
       <img src="{% static 'images/default_avatar.png' %}" width="200" height="200"/>
     </div>

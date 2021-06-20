@@ -4,164 +4,201 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">​
-  <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
   {% load crispy_forms_tags %}
   <title>Kvota-S</title>
   <style>
-    #ButtonOverStretched {
-      z-index: 3;
-      position: relative;
-    }
-    #Search {
-      display: flex;
-      flex-direction: row;
-    }
-    #SearchEl {
-      display: block;
-    }
+  #ButtonOverStretched {
+    z-index: 3;
+    position: relative;
+  }
+  #Search {
+    display: flex;
+    flex-direction: row;
+  }
+  #SearchEl {
+    display: block;
+  }
+  .star {
+  visibility: hidden;
+  font-size: 55px;
+  line-height: 50px;
+  cursor: pointer;
+  position: absolute;
+  }
+  .star:before {
+    content: "\2605";
+    visibility: visible;
+    color: #F7DC6F;
+  }
+  .star:checked:before {
+    content: "\2606";
+    visibility: visible;
+    color: #F7DC6F;
+  }
+  th, td {
+    text-align: center;
+  }
   </style>
 </head>
 <body>
 <div class="container">
-    <header class="kvota-header">
-        <div class="row flex-nowrap justify-content-between align-items-center">
-          <div class="col-4 pt-3">
-            <!-- Add Logo Here -->
-          </div>
-          <div class="col-4 text-center">
-            <a href="/"><font size = 14>Kvota-S</font></a>
-          </div>
-          <div class="col-4 d-flex justify-content-end align-items-center pt-3">
-            {% if user.is_authenticated %}
-              <a class="btn btn-outline-primary" href="/profile/{{ user.id }}">Профиль</a>
-            {% else %}
-              <a class="btn btn-outline-primary" data-toggle="modal" data-target="#login_modal">Вход</a>
-              &nbsp
-              <a class="btn btn-outline-secondary" data-toggle="modal" data-target="#registration_modal">Регистрация</a>
-            {% endif %} 
-          </div>
-        </div>
-    </header>
-    <div class="nav-scroller">
-        <font size = 5>
-        <nav class="nav d-flex justify-content-around">
-          <a class="p-2 text-muted" href="/">Вакансии</a>
-          <a class="p-2 text-muted" href="/cources/">Курсы</a>
-          <a class="p-2 text-muted" href="#">Справка</a>
-        </nav>
-        </font>
+  <header class="kvota-header">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+      <div class="col-4 pt-3">
+        <!-- Add Logo Here -->
+      </div>
+      <div class="col-4 text-center">
+        <a href="/"><font size = 14>Kvota-S</font></a>
+      </div>
+      <div class="col-4 d-flex justify-content-end align-items-center pt-3">
+        {% if user.is_authenticated %}
+          <a class="btn btn-outline-primary" href="/profile/{{ user.id }}">Профиль</a>
+        {% else %}
+          <a class="btn btn-outline-primary" data-toggle="modal" data-target="#login_modal">Вход</a>
+          &nbsp
+          <a class="btn btn-outline-secondary" data-toggle="modal" data-target="#registration_modal">Регистрация</a>
+        {% endif %} 
+      </div>
     </div>
-    <hr>
-    <div>{% block content%}{% endblock content %}</div>
+  </header>
+  <div class="nav-scroller">
+    <font size = 5>
+    <nav class="nav d-flex justify-content-around">
+      <a class="p-2 text-muted" href="/">Вакансии</a>
+      <a class="p-2 text-muted" href="/cources/">Курсы</a>
+      <a class="p-2 text-muted" href="#">Справка</a>
+    </nav>
+    </font>
+  </div>
+  <hr>
+  <div>{% block content%}{% endblock content %}</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 
 <script>
-  $(document).on("click", ".open-AddItem", function () {
-    var item = $(this).data('id');
-    $(".modal-footer #category").val(item);
-  });
-  $(document).on("click", ".open-VacancyInfo", function () {
-    var data = $(this).data('id').split("!");
-    $(".modal-content #name").html(data[0]);
-    if (data[15] == '0') $(".modal-content #wage").html('Зарплата не указана');
-    else $(".modal-content #wage").html(data[15]+'р.');
-    $(".modal-content #date").html(data[1]);
-    $(".modal-content #description").html(data[2]);
-    $(".modal-content #education").html(data[3]);
-    $(".modal-content #mode").html(data[4]);
-    $(".modal-content #group").html(data[5]);
-    $(".modal-content #city").html(data[6]);
-    $(".modal-content #street").html(data[7]);
-    $(".modal-content #house").html(data[8]);
-    $(".modal-content #email").html(data[9]);
-    $(".modal-content #phone").html(data[10]);
-    $(".modal-content #v_username").html(data[11]);
-    document.getElementById("v_username").setAttribute("href", "/profile/"+data[12]);
-    skills = data[13].split(', '), limits = data[14].split(', ');
-    s = '', l = '';
-    for (let i = 0; i < skills.length; i++) {
-      s += '<span class="badge badge-info">'+skills[i].slice(0, -1)+'</span> '
-    }
-    for (let i = 0; i < limits.length; i++) {
-      l += '<span class="badge badge-danger">'+limits[i].slice(0, -1)+'</span> '
-    }
-    $(".modal-content #skills").html(s);
-    $(".modal-content #limits").html(l);
-  });
-  $(document).on('click', '.open-VacancyAction', function () {
-    var action = $(this).data('id');
-    if (action == "add_vacancy"){
-      $('#v_form [name=name]').val('');
-      $('#v_form [name=wage]').val(0);
-      $('#v_form [name=description]').val('');
-      $('#v_form [name=education]').val('-');
-      $('#v_form [name=mode]').val('-');
-      $('#v_form [name=group]').val('-');
-      $('#v_form [name=city]').val('');
-      $('#v_form [name=street]').val('');
-      $('#v_form [name=house]').val('');
-      $('#v_form [name=email]').val('');
-      $('#v_form [name=phone]').val('');
-      $('.modal-footer #v_action').val(action);
-    } else {
-      data = action.split('!');
-      $('#v_form [name=name]').val(data[0]);
-      $('#v_form [name=wage]').val(data[13]);
-      $('#v_form [name=description]').val(data[1]);
-      $('#v_form [name=education]').val(data[2]);
-      $('#v_form [name=skills]').val(data[3].split(', '));
-      $('#v_form [name=mode]').val(data[4]);
-      $('#v_form [name=group]').val(data[5]);
-      $('#v_form [name=limits]').val(data[6].split(', '));
-      $('#v_form [name=city]').val(data[7]);
-      $('#v_form [name=street]').val(data[8]);
-      $('#v_form [name=house]').val(data[9]);
-      $('#v_form [name=email]').val(data[10]);
-      $('#v_form [name=phone]').val(data[11]);
-      $('.modal-footer #v_action').val('red_vacancy!'+data[12]);
-    }
-  });
-  $(document).on('change', '.FavV', function () {
-    let xhr = new XMLHttpRequest();
-    dt = $(this).data('id').split('!');
-    if ($(this).prop('checked')) xhr.open('GET', '/fv/'+dt[0]+'/'+dt[1]+'/0/'+dt[2]+'/');
-    else xhr.open('GET', '/fv/'+dt[0]+'/'+dt[1]+'/1/'+dt[2]+'/');
-    xhr.send();
-  });
-  function RV(f) {
-    event.preventDefault();
-    $.ajax({
-      url: '/RV/',
-      type: 'POST',
-      dataType: "json",
-      data: { 
-        csrfmiddlewaretoken: '{{ csrf_token }}',
-        username: f.username.value,
-        password1: f.password1.value,
-        password2: f.password2.value,
-        action: 'registration'
-      },
-      success: function (resp) {
-        //alert (resp.errors);
-        element = document.getElementById('reger');
-        element.innerHTML = resp.errors;
-        if (resp.v == 1) window.location.href = '/';
-      },
-      error: function (jqXhr, textStatus, errorMessage) {
-        // $('p').append('Error' + errorMessage);
-      }
-    });
+$(document).on("click", ".open-AddItem", function () {
+  var item = $(this).data('id');
+  $(".modal-footer #category").val(item);
+});
+$(document).on("click", ".open-VacancyInfo", function () {
+  var data = $(this).data('id').split("!");
+  $(".modal-content #name").html(data[0]);
+  if (data[15] == '0') $(".modal-content #wage").html('Зарплата не указана');
+  else $(".modal-content #wage").html(data[15]+'р.');
+  $(".modal-content #date").html(data[1]);
+  $(".modal-content #description").html(data[2]);
+  $(".modal-content #education").html(data[3]);
+  $(".modal-content #mode").html(data[4]);
+  $(".modal-content #group").html(data[5]);
+  $(".modal-content #city").html(data[6]);
+  $(".modal-content #street").html(data[7]);
+  $(".modal-content #house").html(data[8]);
+  $(".modal-content #apartment").html(data[16]);
+  $(".modal-content #email").html(data[9]);
+  $(".modal-content #phone").html(data[10]);
+  $(".modal-content #v_username").html(data[11]);
+  document.getElementById("v_username").setAttribute("href", "/profile/"+data[12]);
+  skills = data[13].split(', '), limits = data[14].split(', ');
+  s = '', l = '';
+  for (let i = 0; i < skills.length; i++) {
+    s += '<span class="badge badge-info">'+skills[i].slice(0, -1)+'</span> '
   }
-
-  // Пример того, как можно назначить значение атрибута:
-  // document.getElementById("delv").setAttribute("href", "/vacancy_del/"+data[10]);
+  for (let i = 0; i < limits.length; i++) {
+    l += '<span class="badge badge-danger">'+limits[i].slice(0, -1)+'</span> '
+  }
+  $(".modal-content #skills").html(s);
+  $(".modal-content #limits").html(l);
+});
+$(document).on('click', '.open-VacancyAction', function () {
+  var action = $(this).data('id');
+  if (action == "add_vacancy"){
+    $('#v_form [name=name]').val('');
+    $('#v_form [name=wage]').val(0);
+    $('#v_form [name=description]').val('');
+    $('#v_form [name=education]').val('-');
+    $('#v_form [name=mode]').val('-');
+    $('#v_form [name=group]').val('-');
+    $('#v_form [name=city]').val('');
+    $('#v_form [name=street]').val('');
+    $('#v_form [name=house]').val('');
+    $('#v_form [name=apartment]').val('-');
+    $('#v_form [name=email]').val('');
+    $('#v_form [name=phone]').val('');
+    $('.modal-footer #v_action').val(action);
+  } else {
+    data = action.split('!');
+    $('#v_form [name=name]').val(data[0]);
+    $('#v_form [name=wage]').val(data[13]);
+    $('#v_form [name=description]').val(data[1]);
+    $('#v_form [name=education]').val(data[2]);
+    $('#v_form [name=skills]').val(data[3].split(', '));
+    $('#v_form [name=mode]').val(data[4]);
+    $('#v_form [name=group]').val(data[5]);
+    $('#v_form [name=limits]').val(data[6].split(', '));
+    $('#v_form [name=city]').val(data[7]);
+    $('#v_form [name=street]').val(data[8]);
+    $('#v_form [name=house]').val(data[9]);
+    $('#v_form [name=apartment]').val(data[14]);
+    $('#v_form [name=email]').val(data[10]);
+    $('#v_form [name=phone]').val(data[11]);
+    $('.modal-footer #v_action').val('red_vacancy!'+data[12]);
+  }
+});
+function FavV(cb) {
+  let xhr = new XMLHttpRequest();
+  dt = cb.dataset.id.split('!');
+  if (cb.checked) xhr.open('GET', '/ea/'+dt[0]+'/'+dt[1]+'/0/'+dt[2]+'/');
+  else xhr.open('GET', '/ea/'+dt[0]+'/'+dt[1]+'/1/'+dt[2]+'/');
+  xhr.send();
+}
+function Registration(f) {
+  event.preventDefault();
+  $.ajax({
+    url: '/registration/',
+    type: 'POST',
+    dataType: "json",
+    data: { 
+      csrfmiddlewaretoken: '{{ csrf_token }}',
+      username: f.username.value,
+      password1: f.password1.value,
+      password2: f.password2.value,
+    },
+    success: function (resp) {
+      element = document.getElementById('reger');
+      element.innerHTML = resp.errors;
+      if (resp.v == 1) window.location.href = '/';
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      // alert (errorMessage);
+    }
+  });
+}
+function Login(f) {
+  event.preventDefault();
+  $.ajax({
+    url: '/login/',
+    type: 'POST',
+    dataType: "json",
+    data: { 
+      csrfmiddlewaretoken: '{{ csrf_token }}',
+      username: f.username.value,
+      password: f.password.value,
+    },
+    success: function (resp) {
+      element = document.getElementById('loger');
+      element.innerHTML = resp.errors;
+      if (resp.v == 1) window.location.href = '/';
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      // alert (errorMessage);
+    }
+  });
+}
 </script>
 </body>
 
@@ -174,7 +211,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="POST" onsubmit="RV(this);return false;">
+      <form method="POST" onsubmit="Registration(this);return false;">
         {% csrf_token %}
         <div class="modal-body">
           <center>
@@ -182,11 +219,11 @@
             {{ registration|crispy }}
           </table>
           </center>
-          <div id="reger"></div>
+          <div class="text-danger" id="reger"></div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="submit" class="btn btn-primary" name ="action" value="registration" id="regbutton">Продолжить</button>
+          <button type="submit" class="btn btn-primary" name ="action" value="registration">Продолжить</button>
         </div>
       </form>
     </div>
@@ -202,7 +239,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="POST">
+      <form method="POST" onsubmit="Login(this);return false;">
         {% csrf_token %}
         <div class="modal-body">
           <center>
@@ -210,6 +247,7 @@
             {{ login|crispy }}
           </table>
           </center>
+          <div class="text-danger" id="loger"></div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -345,6 +383,8 @@
                 <label id="street"></label>
               {% elif i == "Строение / Расположение офиса" %}
                 <label id="house"></label>
+              {% elif i == "Предоставление жилья" %}
+                <label id="apartment"></label>
               {% elif i == "Email" %}
                 <label id="email"></label>
               {% elif i == "Контактный телефон" %}

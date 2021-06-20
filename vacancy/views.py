@@ -1,34 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import login, authenticate
 from users.forms import RegistrationForm, LoginForm, UserSearch
 from .forms import VacancySearch, E_C, G_C
 from .models import Vacancy, FavV
 
-V_L = ['Требуемое образование', 'Режим работы', 'Допустимая группа инвалидности', 'Город', 'Улица', 'Строение / Расположение офиса', 'Email', 'Контактный телефон']
+V_L = ['Требуемое образование', 'Режим работы', 'Допустимая группа инвалидности', 'Город', 'Улица', 'Строение / Расположение офиса', 'Предоставление жилья', 'Email', 'Контактный телефон']
 
 def index(request):
-    data, V, v, t = {}, [], Vacancy.objects.all(), True
+    data, V, v = {}, [], Vacancy.objects.all()
     if request.method == 'POST':
-        print(request.POST)
-        if request.POST['action'] == 'registration':
-            form = RegistrationForm(request.POST)
-            if form.is_valid():
-                user = form.save()
-                # Так сожраняются дополнительные поля профиля при регистрации:
-                # user.refresh_from_db()
-                # user.profile.sex = form.cleaned_data.get('sex')
-                # user.save()
-                raw_password = form.cleaned_data.get('password1')
-                user = authenticate(username=user.username, password=raw_password)
-                login(request, user)
-            return redirect('/')
-        elif request.POST['action'] == 'login':
-            user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
-            if user: login(request, user)
-            return redirect('/')
-        elif request.POST['action'] == 'filter':
-            t, e, m, s, l, w = False, request.POST.get('education'), request.POST.get('mode'), set(request.POST.getlist('skills')), set(request.POST.getlist('limits')), request.POST.get('wage')
+        if request.POST['action'] == 'filter':
+            e, m, s, l, w = request.POST.get('education'), request.POST.get('mode'), set(request.POST.getlist('skills')), set(request.POST.getlist('limits')), request.POST.get('wage')
             if e == 'Не требуется': e = '-'
             if w == '': w = 0
             for i in v:
@@ -36,22 +18,27 @@ def index(request):
                     if request.POST.get('education') == '-' or (i.education, i.education) in E_C[:E_C.index((e, e))+1]:
                         if (m == '-' or m == i.mode) and (request.POST.get('group') == '-' or request.POST.get('group') >= i.group):
                             if s.issubset(set(list(i.skills))) and l.isdisjoint(set(list(i.limits))) and i.wage >= int(w):
-                                if request.user.is_authenticated and len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
-                                else: V.insert(0, (i, False))
+                                if request.POST.get('apartment') == '-' or request.POST.get('apartment') == i.apartment:
+                                    if request.user.is_authenticated and len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
+                                    else: V.insert(0, (i, False))
         elif request.POST['action'] == 'suitable':
-            t, u = False, request.user.profile
+            u = request.user.profile
             for i in v:
                 if (i.education, i.education) in E_C[:E_C.index((u.education, u.education))+1]:
                     if (u.group == '-' or u.group >= i.group) and set(list(u.limits)).isdisjoint(set(list(i.limits))):
-                        if len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
-                        else: V.insert(0, (i, False))
+                        if u.city == '' or u.city.lower() in i.city.lower() or (u.move == 'Да' and i.apartment == 'Да') or i.mode == 'Дистанционный режим':
+                            if len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
+                            else: V.insert(0, (i, False))
         elif request.POST['action'] == 'search':
-            t, sd = False, request.POST['search'].lower()
+            sd = request.POST['search'].lower()
             for i in v:
-                if sd in i.name.lower() or sd in i.description.lower():
+                f = True
+                for j in sd.split():
+                    if not (j in i.name.lower() or j in i.description.lower() or j in str(i.wage)): f = False
+                if f:
                     if request.user.is_authenticated and len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
                     else: V.insert(0, (i, False))
-    if t:
+    else:
         for i in v:
             if request.user.is_authenticated and len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
             else: V.insert(0, (i, False))
@@ -67,7 +54,7 @@ def delete(request, vid):
     vacancy.delete()
     return redirect('/profile/'+str(request.user.id))
 
-def fv(request, vid, uid, act, uv):
+def EvalAction(request, vid, uid, act, uv):
     v, u, U = Vacancy.objects.get(id=vid), User.objects.get(id=uid).profile, User.objects.get(id=uid)
     x = FavV.objects.filter(user=U, vacancy=v)
     if act == 1:
@@ -80,7 +67,7 @@ def fv(request, vid, uid, act, uv):
                 for i in sv:
                     if i in list(u.skills): r+=1
                 if (v.education, v.education) in E_C[:E_C.index((u.education, u.education))+1]: r+=1
-                if u.move == 'Да' or v.city == '': r+=2
+                if (u.move == 'Да' and v.apartment == 'Да') or v.mode == 'Дистанционный режим': r+=2
                 else:
                     if v.city == u.city: r+=1
                     if v.street == u.street: r+=1
@@ -94,7 +81,7 @@ def fv(request, vid, uid, act, uv):
         if not x[0].U and not x[0].V: x[0].delete()
     return redirect('/')
 
-def favorite(request):
+def favorites(request):
     data, V, v = {}, [], Vacancy.objects.all()
     for i in v:
         if len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
@@ -107,7 +94,7 @@ def addu(request, vid, mode):
     data, U, u, v, t, s, l = {}, [], User.objects.all(), Vacancy.objects.get(id=vid), True, set(request.POST.getlist('skills')), set(request.POST.getlist('limits'))
     if request.method == 'POST':
         if request.POST['action'] == 'filter':
-            t, e, m, g = False, request.POST.get('education'), request.POST.get('move'), request.POST.get('group')
+            e, m, g = request.POST.get('education'), request.POST.get('move'), request.POST.get('group')
             for i in u:
                 if request.POST.get('name').lower() in i.profile.fio.lower() and request.POST.get('city').lower() in i.profile.city.lower():
                     if g == '-' or (i.profile.group, i.profile.group) in G_C[:G_C.index((g, g))+1]:
@@ -116,13 +103,13 @@ def addu(request, vid, mode):
                                 if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
                                 else: U.insert(0, (i, False))
         elif request.POST['action'] == 'suitable':
-            t = False
             for i in u:
                 if (v.education, v.education) in E_C[:E_C.index((i.profile.education, i.profile.education))+1]:
                     if (i.profile.group == '-' or i.profile.group >= v.group) and set(list(v.limits)).isdisjoint(set(list(i.profile.limits))):
-                        if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
-                        else: U.insert(0, (i, False))
-    if t:
+                        if v.city == '' or i.profile.city.lower() in v.city.lower() or (i.profile.move == 'Да' and v.apartment == 'Да') or v.mode == 'Дистанционный режим':
+                            if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
+                            else: U.insert(0, (i, False))
+    else:
         for i in u:
             if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
             elif mode != 'chosen': U.insert(0, (i, False))
@@ -131,8 +118,8 @@ def addu(request, vid, mode):
     data['vid'] = vid
     return render(request, 'usersearch.html', data)
 
-def uni(request):
+def DataDemo(request):
     data, recs = {}, FavV.objects.all()
     data['items'] = list(reversed(recs))
     data['vlabels'] = V_L
-    return render(request, 'unidata.html', data)
+    return render(request, 'datadisplay.html', data)

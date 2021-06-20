@@ -3,14 +3,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from .forms import RegistrationForm, LoginForm, ProfileForm, ERR
+from .forms import RegistrationForm, ProfileForm, ERR
 from vacancy.models import Vacancy
 from vacancy.forms import VacancyForm
 from vacancy.views import V_L
 
 def index(request, userid):
-    data = {}
-    user = User.objects.get(id = userid)
+    data, user = {}, User.objects.get(id = userid)
     if request.method == 'POST':
         if request.POST['action'] == 'info':
             form = ProfileForm(request.POST, instance=request.user.profile)
@@ -36,7 +35,6 @@ def index(request, userid):
             vacancy = Vacancy.objects.get(id=int(request.POST['action'].split('!')[1]))
             form = VacancyForm(request.POST, instance=vacancy)
             form.save()
-        return redirect('/profile/'+str(userid))
     data['uobj'] = user
     data['profile'] = ProfileForm(instance=user.profile)
     data['wish'] = user.profile.job_wish.split('!')
@@ -61,16 +59,12 @@ def del_item(request, userid, category, item):
     user.save()
     return redirect('/profile/'+str(userid))
 
-def exit(request):
-    logout(request)
-    return redirect('/')
-
-def RV(request):
+def registration(request):
     form = RegistrationForm(request.POST)
     t = 1 if form.is_valid() else 0
     s, r, l = str(form.errors), '<br><ul class="errorlist">', request.POST['username']
-    if len(l) < 4: t, r = 0, r+'<li>'+'Логин слишком короткий (минимум 4 символа);'+'</li>'
-    if not l.isalnum(): t, r = 0, r+'<li>'+'Логин может включать в себя только буквы или цифры;'+'</li>'
+    if len(l) < 4: t, r = 0, r+'<li>'+'<strong>Логин</strong> слишком короткий (минимум <strong>4</strong> символа);'+'</li>'
+    if not l.isalnum(): t, r = 0, r+'<li>'+'<strong>Логин</strong> может включать в себя только <strong>буквы</strong> или <strong>цифры</strong>;'+'</li>'
     for i in ERR:
         if i[0] in s: r+='<li>'+i[1]+'</li>'
     if t == 1:
@@ -84,3 +78,18 @@ def RV(request):
         login(request, user)
     if r == '<br><ul class="errorlist">': r = ''
     return HttpResponse(json.dumps({'v': t, 'errors': r}))
+
+def login(request):
+    user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
+    if user:
+        login(request, user)
+        return HttpResponse(json.dumps({'v': 1, 'errors': ''}))
+    else:
+        r, l = '<br><ul class="errorlist">', request.POST['username']
+        if len(User.objects.filter(username=l)) == 1: r+='<li>'+'Неправильное сочетание <strong>логина</strong> и <strong>пароля</strong>;'+'</li>'
+        else: r+='<li>'+'Пользователя с указанным <strong>логином</strong> не существует;'+'</li>'
+        return HttpResponse(json.dumps({'v': 0, 'errors': r}))
+
+def exit(request):
+    logout(request)
+    return redirect('/')

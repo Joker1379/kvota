@@ -3,12 +3,12 @@
 <table class="table">
   <thead class="thead-dark">
     <tr>
-      <th scope="col">Date</th>
-      <th scope="col">Vacancy</th>
-      <th scope="col">User</th>
-      <th scope="col">V</th>
-      <th scope="col">U</th>
-      <th scope="col">Rate</th>
+      <th scope="col">Дата</th>
+      <th scope="col">Вакансия</th>
+      <th scope="col">Потенциальный работник</th>
+      <th scope="col">Интерес работодателя</th>
+      <th scope="col">Интерес работника</th>
+      <th scope="col">Рейтинг совместимости</th>
     </tr>
   </thead>
   {% for i in items %}
@@ -23,7 +23,7 @@
     {% endif %}
       <th scope="row">{{i.date}}</th>
       <td>
-        <a data-id="{{i.vacancy.name}}!{{i.vacancy.date}}!{{i.vacancy.description}}!{{i.vacancy.education}}!{{i.vacancy.mode}}!{{i.vacancy.group}}!{{i.vacancy.city}}!{{i.vacancy.street}}!{{i.vacancy.house}}!{{i.vacancy.email}}!{{i.vacancy.phone}}!{{i.vacancy.user.username}}!{{i.vacancy.user.id}}!{{i.vacancy.skills}}!{{i.vacancy.limits}}"
+        <a data-id="{{i.vacancy.name}}!{{i.vacancy.date}}!{{i.vacancy.description}}!{{i.vacancy.education}}!{{i.vacancy.mode}}!{{i.vacancy.group}}!{{i.vacancy.city}}!{{i.vacancy.street}}!{{i.vacancy.house}}!{{i.vacancy.email}}!{{i.vacancy.phone}}!{{i.vacancy.user.username}}!{{i.vacancy.user.id}}!{{i.vacancy.skills}}!{{i.vacancy.limits}}!{{i.vacancy.wage}}!{{i.vacancy.apartment}}"
         class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{i.vacancy.name}}</a>
       </td>
       <td><a href="/profile/{{i.user.id}}">{{i.user.username}}</a></td>
