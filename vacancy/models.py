@@ -22,6 +22,7 @@ class Vacancy(models.Model):
     group = models.CharField(max_length=10, blank=True, default='')
     skills = MultiSelectField(choices=S_C, blank=True)
     limits = MultiSelectField(choices=L_C, blank=True)
+    def vdata(self): return self.description+'!'+self.education+'!'+self.mode+'!'+str(self.group)+'!'+self.city+'!'+self.street+'!'+self.house+'!'+self.email+'!'+self.phone+'!'+self.user.username+'!'+str(self.user.id)+'!'+str(self.skills)+'!'+str(self.limits)+'!'+str(self.wage)+'!'+self.apartment
 
 class FavV(models.Model):
     date = models.DateField(auto_now_add=True)

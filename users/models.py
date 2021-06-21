@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from multiselectfield import MultiSelectField
-from vacancy.models import S_C, L_C
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from vacancy.models import S_C, L_C, FavV, Vacancy
+from modules.DataEvaluation import rate
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -26,6 +27,17 @@ class Profile(models.Model):
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+    if created: Profile.objects.create(user=instance)
     instance.profile.save()
+
+@receiver(post_save, sender=Profile)
+def user_data_update(sender, instance, created, **kwargs):
+    for i in FavV.objects.filter(user=instance.user):
+        i.rate = rate(i.vacancy, i.user.profile)
+        i.save()
+
+@receiver(post_save, sender=Vacancy)
+def vacancy_data_update(sender, instance, created, **kwargs):
+    for i in FavV.objects.filter(vacancy=instance):
+        i.rate = rate(i.vacancy, i.user.profile)
+        i.save()

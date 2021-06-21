@@ -21,8 +21,8 @@ from users import views as uv
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('registration/', uv.registration, name = 'registration'),
-    path('login/', uv.login, name = 'login'),
+    path('registration/', uv.Registration, name = 'registration'),
+    path('login/', uv.Login, name = 'login'),
     path('exit/', uv.exit, name = 'logout'),
     path('profile/<int:userid>/<str:category>/<str:item>/', uv.del_item, name = 'delete_speciality'),
     path('profile/<int:userid>/', uv.index, name = 'profile'),

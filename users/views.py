@@ -59,7 +59,7 @@ def del_item(request, userid, category, item):
     user.save()
     return redirect('/profile/'+str(userid))
 
-def registration(request):
+def Registration(request):
     form = RegistrationForm(request.POST)
     t = 1 if form.is_valid() else 0
     s, r, l = str(form.errors), '<br><ul class="errorlist">', request.POST['username']
@@ -79,7 +79,7 @@ def registration(request):
     if r == '<br><ul class="errorlist">': r = ''
     return HttpResponse(json.dumps({'v': t, 'errors': r}))
 
-def login(request):
+def Login(request):
     user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
     if user:
         login(request, user)

@@ -23,7 +23,7 @@
     {% endif %}
       <th scope="row">{{i.date}}</th>
       <td>
-        <a data-id="{{i.vacancy.name}}!{{i.vacancy.date}}!{{i.vacancy.description}}!{{i.vacancy.education}}!{{i.vacancy.mode}}!{{i.vacancy.group}}!{{i.vacancy.city}}!{{i.vacancy.street}}!{{i.vacancy.house}}!{{i.vacancy.email}}!{{i.vacancy.phone}}!{{i.vacancy.user.username}}!{{i.vacancy.user.id}}!{{i.vacancy.skills}}!{{i.vacancy.limits}}!{{i.vacancy.wage}}!{{i.vacancy.apartment}}"
+        <a data-id="{{i.vacancy.name}}!{{i.vacancy.date}}!{{i.vacancy.vdata}}"
         class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{i.vacancy.name}}</a>
       </td>
       <td><a href="/profile/{{i.user.id}}">{{i.user.username}}</a></td>
@@ -37,7 +37,7 @@
       {% else %}
         <td><input type="checkbox" onclick="return false;"></td>
       {% endif %}
-      <td>{{i.rate}}</td>
+      <td><strong>{{i.rate}}</strong></td>
     </tr>
   {% empty %}
     Записей не найдено...

@@ -1,6 +1,8 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from users.forms import RegistrationForm, LoginForm, UserSearch
+from modules.DataEvaluation import rate
 from .forms import VacancySearch, E_C, G_C
 from .models import Vacancy, FavV
 
@@ -54,33 +56,6 @@ def delete(request, vid):
     vacancy.delete()
     return redirect('/profile/'+str(request.user.id))
 
-def EvalAction(request, vid, uid, act, uv):
-    v, u, U = Vacancy.objects.get(id=vid), User.objects.get(id=uid).profile, User.objects.get(id=uid)
-    x = FavV.objects.filter(user=U, vacancy=v)
-    if act == 1:
-        if len(x)==0:
-            r, lv, sv, nv = 0, set(list(v.limits)), list(v.skills), set(v.name.lower().split())
-            if (v.group == '-' or u.group == '-' or v.group <= u.group) and (len(lv) == 0 or lv.isdisjoint(set(list(u.limits)))):
-                if not nv.isdisjoint(set(u.job_wish.lower().split('!'))): r+=1
-                if not nv.isdisjoint(set(u.profession.lower().split('!'))): r+=1
-                if not nv.isdisjoint(set(u.experience.lower().split('!'))): r+=1
-                for i in sv:
-                    if i in list(u.skills): r+=1
-                if (v.education, v.education) in E_C[:E_C.index((u.education, u.education))+1]: r+=1
-                if (u.move == 'Да' and v.apartment == 'Да') or v.mode == 'Дистанционный режим': r+=2
-                else:
-                    if v.city == u.city: r+=1
-                    if v.street == u.street: r+=1
-            if uv=='u': res = FavV.objects.create(user=U, vacancy=v, U=True, rate=round(r/(6+len(sv)), 2))
-            else: res = FavV.objects.create(user=U, vacancy=v, V=True, rate=round(r/(6+len(sv)), 2))
-        elif uv=='u': x.update(U=True)
-        else: x.update(V=True)
-    else:
-        if uv=='u': x.update(U=False)
-        else: x.update(V=False)
-        if not x[0].U and not x[0].V: x[0].delete()
-    return redirect('/')
-
 def favorites(request):
     data, V, v = {}, [], Vacancy.objects.all()
     for i in v:
@@ -117,6 +92,21 @@ def addu(request, vid, mode):
     data['users'] = U
     data['vid'] = vid
     return render(request, 'usersearch.html', data)
+
+def EvalAction(request, vid, uid, act, uv):
+    v, u, U = Vacancy.objects.get(id=vid), User.objects.get(id=uid).profile, User.objects.get(id=uid)
+    x = FavV.objects.filter(user=U, vacancy=v)
+    if act == 1:
+        if len(x)==0:
+            if uv=='u': res = FavV.objects.create(user=U, vacancy=v, U=True, rate=rate(v, u))
+            else: res = FavV.objects.create(user=U, vacancy=v, V=True, rate=rate(v, u))
+        elif uv=='u': x.update(U=True)
+        else: x.update(V=True)
+    else:
+        if uv=='u': x.update(U=False)
+        else: x.update(V=False)
+        if not x[0].U and not x[0].V: x[0].delete()
+    return HttpResponse()
 
 def DataDemo(request):
     data, recs = {}, FavV.objects.all()
