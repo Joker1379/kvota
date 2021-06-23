@@ -38,6 +38,9 @@
   th, td {
     text-align: center;
   }
+  .modal-sm {
+    max-width: 430px;
+  }
   </style>
 </head>
 <body>
@@ -203,7 +206,7 @@ function Login(f) {
 </body>
 
 <div class="modal fade" id="registration_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Регистрация</h5>
@@ -231,7 +234,7 @@ function Login(f) {
 </div>
 
 <div class="modal fade" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Вход</h5>
@@ -357,11 +360,11 @@ function Login(f) {
         <hr>
         <center>
         <h6>
-          <span><strong>&nbsp Желательные Навыки: </strong></span>
+          <span><strong>Желательные Навыки: </strong></span>
           <span id="skills"> - </span>
         </h6>
         <h6>
-          <span><strong>&nbsp Ограничения: </strong></span>
+          <span><strong>Недопустимые Ограничения: </strong></span>
           <span id="limits"> - </span>
         </h6>
         </center>

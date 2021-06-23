@@ -15,16 +15,16 @@ ERR = (
     ('The password is too similar to the username.', '<strong>Логин</strong> и <strong>пароль</strong> слишком схожи;'),)
 
 class RegistrationForm(UserCreationForm):
-    username = forms.CharField(label="Логин:", widget=forms.TextInput(attrs={'class': 'form-control form-control-md'}))
-    password1 = forms.CharField(label="Пароль:", widget=forms.PasswordInput(attrs={'class':'form-control form-control-md', 'type':'password'}))
-    password2 = forms.CharField(label="Повторите Пароль:", widget=forms.PasswordInput(attrs={'class':'form-control form-control-md', 'type':'password'}))
+    username = forms.CharField(label='', widget=forms.TextInput(attrs={'class': 'form-control form-control-md mb-sm-3', 'placeholder': 'Логин'}))
+    password1 = forms.CharField(label='', widget=forms.PasswordInput(attrs={'class':'form-control form-control-md mb-sm-3', 'placeholder': 'Пароль', 'type':'password'}))
+    password2 = forms.CharField(label='', widget=forms.PasswordInput(attrs={'class':'form-control form-control-md', 'placeholder': 'Повторите пароль', 'type':'password'}))
     class Meta:
         model = User
         fields = ('username', 'password1', 'password2')
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(label="Логин:", widget=forms.TextInput(attrs={'class': 'form-control form-control-md'}))
-    password = forms.CharField(label="Пароль:", widget=forms.PasswordInput(attrs={'class':'form-control form-control-md', 'type':'password'}))
+    username = forms.CharField(label='', widget=forms.TextInput(attrs={'class': 'form-control form-control-md mb-sm-3', 'placeholder': 'Логин'}))
+    password = forms.CharField(label='', widget=forms.PasswordInput(attrs={'class':'form-control form-control-md', 'placeholder': 'Пароль', 'type':'password'}))
     class Meta:
         model = User
         fields = ('username', 'password')
