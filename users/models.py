@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from multiselectfield import MultiSelectField
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 from vacancy.models import S_C, L_C, FavV, Vacancy
 from modules.DataEvaluation import rate
 
@@ -22,6 +23,7 @@ class Profile(models.Model):
     experience = models.CharField(max_length=300, blank=True, default='')
     skills = MultiSelectField(choices=S_C, blank=True)
     limits = MultiSelectField(choices=L_C, blank=True)
+    is_online = models.BooleanField(default=False)
     def s_list(self): return str(self.skills).split(',')[:3]
     def l_list(self): return str(self.limits).split(',')[:3]
 
@@ -41,3 +43,13 @@ def vacancy_data_update(sender, instance, created, **kwargs):
     for i in FavV.objects.filter(vacancy=instance):
         i.rate = rate(i.vacancy, i.user.profile)
         i.save()
+
+@receiver(user_logged_in)
+def got_online(sender, user, request, **kwargs):    
+    user.profile.is_online = True
+    user.profile.save()
+
+@receiver(user_logged_out)
+def got_offline(sender, user, request, **kwargs):   
+    user.profile.is_online = False
+    user.profile.save()

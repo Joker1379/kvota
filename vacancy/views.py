@@ -84,6 +84,12 @@ def addu(request, vid, mode):
                         if v.city == '' or i.profile.city.lower() in v.city.lower() or (i.profile.move == 'Да' and v.apartment == 'Да') or v.mode == 'Дистанционный режим':
                             if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
                             else: U.insert(0, (i, False))
+        elif request.POST['action'] == 'search':
+            sd = request.POST['search'].lower()
+            for i in u:
+                if sd in i.username.lower() or sd in i.profile.fio.lower():
+                    if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))
+                    else: U.insert(0, (i, False))
     else:
         for i in u:
             if len(FavV.objects.filter(user=i, vacancy=v))==1 and FavV.objects.get(user=i, vacancy=v).V: U.insert(0, (i, True))

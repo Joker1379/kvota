@@ -3,15 +3,25 @@
 <div class="container profile">
   <div class="row">
     <div class="col-md-4">
-      <div class="profile-img">
+      <div class="row">
         {% load static %}
-        <img src="{% static 'images/default_avatar.png' %}" width="250" height="250"/>
+        <div class="col-12 d-flex justify-content-center">
+          <img src="{% static 'images/default_avatar.png' %}" class="rounded_pic" width="250" height="250"/>
         <!--
         <div class="file btn btn-lg btn-primary">
           Change Photo
           <input type="file" name="file"/>
         </div>
         -->
+        </div>
+        
+        <div class="col-12 d-flex justify-content-center pt-3 pb-3">
+          {% if uobj.profile.is_online %}
+            <span class="online"></span> <span class="text-success">online</span>
+          {% else %}
+            <span class="offline"></span> <span class="text-danger">offline</span>
+          {% endif %}
+        </div>
       </div>
     </div>
     <div class="col-md">
@@ -19,6 +29,7 @@
         <h1>
         {{ uobj.username }}
         </h1>
+        <span class='text-muted'>{{ uobj.date_joined }}</span><br><br>
         <h6>
           <span><strong>Желаемые cпециальности:</strong></span>
           {% if user.id == uobj.id %}
@@ -71,111 +82,108 @@
             <span class="badge badge-danger">{{ i|slice:":-1" }}</span>
           {% endfor %}
         </h6>
-        <ul class="nav nav-tabs" id="profile_tabs" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Информация</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="vacancy-tab" data-toggle="tab" href="#vacancy" role="tab" aria-controls="vacancy" aria-selected="false">Вакансии</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="courses-tab" data-toggle="tab" href="#courses" role="tab" aria-controls="courses" aria-selected="false">Курсы</a>
-          </li>
-        </ul>
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 pb-3 d-flex justify-content-center order-last order-md-first">
       <div class="options">
-        <br>STATUS<br>
-        {{ uobj.date_joined }}
-        <br><br><br>
         {% if user.id == uobj.id %}
           <a class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#profile_modal">Редактировать Профиль</a><br><hr>
-          <a class="btn btn-sm btn-outline-danger" href="/exit">Выйти</a><br>
+          <a class="btn btn-sm btn-outline-danger" href="/exit">Выйти</a>
         {% endif %}
       </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-8 pt-3 pb-5">
+      <ul class="nav nav-tabs" id="profile_tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Информация</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="vacancy-tab" data-toggle="tab" href="#vacancy" role="tab" aria-controls="vacancy" aria-selected="false">Вакансии</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="courses-tab" data-toggle="tab" href="#courses" role="tab" aria-controls="courses" aria-selected="false">Курсы</a>
+        </li>
+      </ul>
       <div class="tab-content profile-tab" id="profile_tab_content">
         <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
           <div class="row pt-3">
-            <div class="col-md-6">
-              <label>ФИО:</label>
+            <div class="col-md-4">
+              <strong>ФИО:</strong>
             </div>
-            <div class="col-md-6">
-              <center><p>{{ uobj.profile.fio }}</p></center>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <label>Пол:</label>
-            </div>
-            <div class="col-md-6">
-              <center><p>{{ uobj.profile.sex }}</p></center>
+            <div class="col-md-7 d-flex justify-content-start">
+              <p>{{ uobj.profile.fio }}</p>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
-              <label>Возраст:</label>
+            <div class="col-md-4">
+              <strong>Пол:</strong>
             </div>
-            <div class="col-md-6">
-              <center><p>
+            <div class="col-md-7 d-flex justify-content-start">
+              <p>{{ uobj.profile.sex }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <strong>Возраст:</strong>
+            </div>
+            <div class="col-md-7 d-flex justify-content-start">
+              <p>
                 {% if uobj.profile.age == 0 %}
                   -
                 {% else %}
                   {{ uobj.profile.age }}
                 {% endif %} 
-              </p></center>
+              </p>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
-              <label>Образование:</label>
+            <div class="col-md-4">
+              <strong>Образование:</strong>
             </div>
-            <div class="col-md-6">
-              <center><p>{{ uobj.profile.education }}</p></center>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <label>Группа инвалидности:</label>
-            </div>
-            <div class="col-md-6">
-              <center><p>{{ uobj.profile.group }}</p></center>
+            <div class="col-md-7 d-flex justify-content-start">
+              <p>{{ uobj.profile.education }}</p>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
-              <label>Город:</label>
+            <div class="col-md-4">
+              <strong>Группа инвалидности:</strong>
             </div>
-            <div class="col-md-6">
-              <center><p>{{ uobj.profile.city }}</p></center>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <label>Улица:</label>
-            </div>
-            <div class="col-md-6">
-              <center><p>{{ uobj.profile.street }}</p></center>
+            <div class="col-md-7 d-flex justify-content-start">
+              <p>{{ uobj.profile.group }}</p>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
-              <label>Готовность переезжать:</label>
+            <div class="col-md-4">
+              <strong>Город:</strong>
             </div>
-            <div class="col-md-6">
-              <center><p>{{ uobj.profile.move }}</p></center>
+            <div class="col-md-7 d-flex justify-content-start">
+              <p>{{ uobj.profile.city }}</p>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
-              <label>Контактный телефон:</label>
+            <div class="col-md-4">
+              <strong>Улица:</strong>
             </div>
-            <div class="col-md-6">
-              <center><p>{{ uobj.profile.phone }}</p></center>
+            <div class="col-md-7 d-flex justify-content-start">
+              <p>{{ uobj.profile.street }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <strong>Готовность переезжать:</strong>
+            </div>
+            <div class="col-md-7 d-flex justify-content-start">
+              <p>{{ uobj.profile.move }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <strong>Контактный телефон:</strong>
+            </div>
+            <div class="col-md-7 d-flex justify-content-start">
+              <p>{{ uobj.profile.phone }}</p>
             </div>
           </div>
         </div>

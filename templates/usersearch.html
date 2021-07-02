@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row flex-nowrap justify-content-between align-items-center">
+<div class="row">
   <div class="col pt-1 pb-3">
     {% if user.is_authenticated %}
       <a class="btn btn-outline-warning" href="/users/{{vid}}/chosen">Выбранные кандидаты</a>
       <a class="btn btn-outline-primary" href="/users/{{vid}}/all">Все</a>
     {% endif %}
   </div>
-  <div class="col text-center">
-    <!-- Search -->
+  <div class="col-lg text-center pt-1 pb-3">
+    <form id="Search" method="POST">
+      {% csrf_token %}
+      <input id="SearchEl" name="search" type="search" class="form-control rounded" placeholder="Поиск..." aria-label="Search" aria-describedby="search-addon"/>
+      <button type="submit" class="btn btn-outline-primary" name ="action" value="search">Найти</button>
+    </form>
   </div>
-  <div class="col-4 d-flex justify-content-end pt-1 pb-3">
+  <div class="col d-flex justify-content-end pt-1 pb-3">
     <a class="btn btn-outline-primary" data-toggle="modal" data-target="#filter_modal">Фильтр Пользователей</a> 
   </div>
 </div>
@@ -27,6 +31,11 @@
         </div>
         <div class="col pt-3">
           <a class="h5" href="/profile/{{i.0.id}}">{{i.0.username}}</a>
+          {% if i.0.profile.is_online %}
+            <span class="online"></span>
+          {% else %}
+            <span class="offline"></span>
+          {% endif %}
           <div class="mb-1 text-muted">{{ i.0.date_joined }}</div>
         </div>
       </div>
@@ -45,7 +54,7 @@
         </h6>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 d-none d-md-block">
       <p><strong>ФИО:</strong> {{i.0.profile.fio}}</p>
       <p><strong>Пол:</strong> {{i.0.profile.sex}}</p>
       <p><strong>Возраст:</strong>
@@ -58,13 +67,13 @@
       <p><strong>Образование:</strong> {{i.0.profile.education}}</p>
       <p><strong>Город:</strong> {{i.0.profile.city}}</p>
     </div>
-    <div class="col-3">
+    <div class="col-3 d-none d-lg-block">
       {% load static %}
-      <img src="{% static 'images/default_avatar.png' %}" width="200" height="200"/>
+      <img src="{% static 'images/default_avatar.png' %}" class="rounded_pic" width="200" height="200"/>
     </div>
   </div>
   <hr>
 {% empty %}
-  Доступных пользователей не найдено...
+  <div class="col d-flex justify-content-center"><strong>Подходящих пользователей не найдено...</strong></div>
 {% endfor %}
 {% endblock content %}

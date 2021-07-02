@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from .forms import RegistrationForm, ProfileForm, ERR
+from .forms import LoginForm, RegistrationForm, ProfileForm, ERR
 from vacancy.models import Vacancy
 from vacancy.forms import VacancyForm
 from vacancy.views import V_L
@@ -43,6 +43,8 @@ def index(request, userid):
     data['vform'] = VacancyForm()
     data['vacancy'] = list(reversed(Vacancy.objects.filter(user = user)))
     data['vlabels'] = V_L
+    data['login'] = LoginForm()
+    data['registration'] = RegistrationForm()
     return render(request, 'profile.html', data)
 
 def del_item(request, userid, category, item):

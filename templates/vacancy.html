@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row flex-nowrap justify-content-between align-items-center">
-  <div class="col-4 pt-1 pb-3">
+<div class="row">
+  <div class="col pt-1 pb-3 order-1">
     {% if user.is_authenticated %}
       <a class="btn btn-outline-warning" href="/vfavorites">Избранные</a>
       <a class="btn btn-outline-primary" href="/">Все</a>
+    {% else %}
+      <a class="btn btn-outline-primary" href="/">Все Вакансии</a>
     {% endif %}
   </div>
-  <div class="col-4 text-center pt-1 pb-3">
+  <div class="col-lg text-center pt-1 pb-3 order-last order-lg-2">
     <form id="Search" method="POST">
         {% csrf_token %}
         <input id="SearchEl" name="search" type="search" class="form-control rounded" placeholder="Поиск..." aria-label="Search" aria-describedby="search-addon"/>
         <button type="submit" class="btn btn-outline-primary" name ="action" value="search">Найти</button>
     </form>
   </div>
-  <div class="col-4 d-flex justify-content-end pt-1 pb-3">
+  <div class="col d-flex justify-content-end pt-1 pb-3 order-3">
     <a class="btn btn-outline-primary" data-toggle="modal" data-target="#filter_modal">Фильтр Вакансий</a> 
   </div>
 </div>
