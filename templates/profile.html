@@ -6,7 +6,7 @@
       <div class="row">
         {% load static %}
         <div class="col-12 d-flex justify-content-center">
-          <img src="{% static 'images/default_avatar.png' %}" class="rounded_pic" width="250" height="250"/>
+          <img src="{% static 'images/default_avatar.png' %}" class="avatar rounded_pic"/>
         <!--
         <div class="file btn btn-lg btn-primary">
           Change Photo
@@ -14,29 +14,41 @@
         </div>
         -->
         </div>
-        
-        <div class="col-12 d-flex justify-content-center pt-3 pb-3">
-          {% if uobj.profile.is_online %}
+        <div class="col-12 pt-3 pb-3">
+          <center>
+          {% if uobj.profile.online %}
             <span class="online"></span> <span class="text-success">online</span>
           {% else %}
-            <span class="offline"></span> <span class="text-danger">offline</span>
+            <span class="offline"></span> <span class="text-danger">offline</span><br>
+            <span class="text-muted">Last Seen:
+              {% if uobj.profile.last_seen %}
+                {{ uobj.profile.last_seen|timesince }} ago
+              {% else %}
+                awhile...
+              {% endif %}
+            </span>
           {% endif %}
+          </center>
         </div>
       </div>
     </div>
     <div class="col-md">
       <div class="profile-head">
-        <h1>
-        {{ uobj.username }}
-        </h1>
-        <span class='text-muted'>{{ uobj.date_joined }}</span><br><br>
+        <div class="d-flex justify-content-center justify-content-md-start">
+          <h1>
+          {{ uobj.username }}
+          </h1>
+        </div>
+        <div class="d-flex justify-content-center justify-content-md-start pb-4">
+          <span class='text-muted'>{{ uobj.date_joined }}</span>
+        </div>
         <h6>
           <span><strong>Желаемые cпециальности:</strong></span>
           {% if user.id == uobj.id %}
             {% for i in wish %}
               <a href="/profile/{{user.id}}/wish/{{i}}"><span class="badge badge-success">{{ i }}</span></a>
             {% endfor %}
-            <span class="open-AddItem btn btn-sm btn-outline-success" data-toggle="modal" data-id="wish" data-target="#add_modal">Добавить</span>
+            <a class="open-AddItem text-muted" href='#' data-toggle="modal" data-id="wish" data-target="#add_modal">Добавить</a>
           {% else %}
             {% for i in wish %}
               <span class="badge badge-success">{{ i }}</span>
@@ -49,7 +61,7 @@
             {% for i in profession %}
               <a href="/profile/{{user.id}}/profession/{{i}}"><span class="badge badge-warning">{{ i }}</span></a>
             {% endfor %}
-            <span class="open-AddItem btn btn-sm btn-outline-warning" data-toggle="modal" data-id="profession" data-target="#add_modal">Добавить</span>
+            <a class="open-AddItem text-muted" href="#" data-toggle="modal" data-id="profession" data-target="#add_modal">Добавить</a>
           {% else %}
             {% for i in profession %}
               <span class="badge badge-warning">{{ i }}</span>
@@ -62,7 +74,7 @@
             {% for i in experience %}
               <a href="/profile/{{user.id}}/experience/{{i}}"><span class="badge badge-primary">{{ i }}</span></a>
             {% endfor %}
-            <span class="open-AddItem btn btn-sm btn-outline-primary" data-toggle="modal" data-id="experience" data-target="#add_modal">Добавить</span>
+            <a class="open-AddItem text-muted" href="#" data-toggle="modal" data-id="experience" data-target="#add_modal">Добавить</a>
           {% else %}
             {% for i in experience %}
               <span class="badge badge-primary">{{ i }}</span>
@@ -86,15 +98,15 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-4 pb-3 d-flex justify-content-center order-last order-md-first">
-      <div class="options">
-        {% if user.id == uobj.id %}
-          <a class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#profile_modal">Редактировать Профиль</a><br><hr>
-          <a class="btn btn-sm btn-outline-danger" href="/exit">Выйти</a>
-        {% endif %}
-      </div>
+    <div class="col-md-4 pb-3 order-last order-md-first">
+      <center>
+      {% if user.id == uobj.id %}
+        <a class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#profile_modal">Редактировать Профиль</a><br><hr>
+        <a class="btn btn-sm btn-outline-danger" href="/exit">Выйти</a>
+      {% endif %}
+      </center>
     </div>
-    <div class="col-md-8 pt-3 pb-5">
+    <div class="col-md-8 pt-4 pt-md-0 pb-5">
       <ul class="nav nav-tabs" id="profile_tabs" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Информация</a>

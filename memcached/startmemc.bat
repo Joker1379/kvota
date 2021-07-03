@@ -1,0 +1,1 @@
+.\memcached.exe -m 512 -vvv
