@@ -106,7 +106,7 @@
       {% endif %}
       </center>
     </div>
-    <div class="col-md-8 pt-4 pt-md-0 pb-5">
+    <div class="col-md-8 pt-1 pt-md-0 pb-5">
       <ul class="nav nav-tabs" id="profile_tabs" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Информация</a>
@@ -120,7 +120,7 @@
       </ul>
       <div class="tab-content profile-tab" id="profile_tab_content">
         <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
-          <div class="row pt-3">
+          <div class="row pt-4">
             <div class="col-md-4">
               <strong>ФИО:</strong>
             </div>
@@ -199,7 +199,7 @@
             </div>
           </div>
         </div>
-        <div class="tab-pane fade pt-3" id="vacancy" role="tabpanel" aria-labelledby="vacancy-tab">
+        <div class="tab-pane fade pt-4" id="vacancy" role="tabpanel" aria-labelledby="vacancy-tab">
           <center>
           {% if user.id == uobj.id %}
             <a class="open-VacancyAction btn btn-sm btn-outline-primary" data-toggle="modal" data-id="add_vacancy" data-target="#vacancy_modal">Добавить Вакансию</a><br><br>
@@ -207,13 +207,20 @@
               {% for item in vacancy %}
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <a data-id="{{item.name}}!{{item.date}}!{{item.vdata}}"
-                class="open-VacancyInfo h6" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name|truncatechars:30 }}</a>
+                class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name|truncatechars:30 }}</a>
                 <span>
-                  <div class="badge badge-primary badge-pill">{{ item.date }}</div>&nbsp
-                  <a class="text-info" href="/users/{{item.id}}/all">Найти работников</a>&nbsp
-                  <a data-id="{{item.name}}!{{item.description}}!{{item.education}}!{{item.skills}}!{{item.mode}}!{{item.group}}!{{item.limits}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.id}}!{{item.wage}}!{{item.apartment}}"
-                  class="open-VacancyAction text-secondary" data-toggle="modal" data-target="#vacancy_modal" href=#>Изменить</a>&nbsp
-                  <a class="text-danger" href="/vdelete/{{item.id}}">Удалить</a>
+                  <span class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Опции
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <li><a class="dropdown-item text-info" href="/users/{{item.id}}/all">Найти работников</a></li>
+                      <li><a data-id="{{item.name}}!{{item.description}}!{{item.education}}!{{item.skills}}!{{item.mode}}!{{item.group}}!{{item.limits}}!{{item.city}}!{{item.street}}!{{item.house}}!{{item.email}}!{{item.phone}}!{{item.id}}!{{item.wage}}!{{item.apartment}}"
+                        class="dropdown-item open-VacancyAction text-secondary" data-toggle="modal" data-target="#vacancy_modal" href="#">Изменить</a></li>
+                      <div class="dropdown-divider"></div>
+                      <li><a class="dropdown-item text-danger" href="/vdelete/{{item.id}}">Удалить</a></li>
+                    </ul>
+                  </span>
                 </span>
               </li>
               {% empty %}
@@ -224,9 +231,17 @@
             <ul class="list-group list-group-flush">
               {% for item in vacancy %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <a data-id="{{item.name}}!{{item.date}}!{{item.vdata}}"
-                  class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{ item.name }}</a>
-                  <span class="badge badge-primary badge-pill">{{ item.date }}</span>
+                  <a data-id="{{item.0.name}}!{{item.0.date}}!{{item.0.vdata}}"
+                  class="open-VacancyInfo" data-toggle="modal" data-target="#info_modal" href="#">{{ item.0.name }}</a>
+                  {% if user.is_authenticated %}
+                    {% if item.1 %}
+                      <span><input class="FavV star star-p align-top" width="10px" type="checkbox" data-id="{{item.0.id}}!{{user.id}}!u" onchange="FavV(this);"></span>
+                    {% else %}
+                      <span><input class="FavV star star-p align-top" type="checkbox" data-id="{{item.0.id}}!{{user.id}}!u" onchange="FavV(this);" checked></span>
+                    {% endif %}
+                  {% else %}
+                    <span class="badge badge-primary badge-pill">{{ item.0.date }}</span>
+                  {% endif %}
                 </li>
               {% empty %}
                 Пользователь не предлагает вакансий...
@@ -235,7 +250,7 @@
           {% endif %}
           </center>
         </div>
-        <div class="tab-pane fade pt-3" id="courses" role="tabpanel" aria-labelledby="courses-tab">
+        <div class="tab-pane fade pt-4" id="courses" role="tabpanel" aria-labelledby="courses-tab">
           <center>
           {% if user.id == uobj.id %}
             <a class="btn btn-sm btn-outline-primary" href="#">Добавить Курс</a><br><br>

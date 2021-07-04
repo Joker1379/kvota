@@ -4,12 +4,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from .forms import LoginForm, RegistrationForm, ProfileForm, ERR
-from vacancy.models import Vacancy
+from vacancy.models import Vacancy, FavV
 from vacancy.forms import VacancyForm
 from vacancy.views import V_L
 
 def index(request, userid):
-    data, user = {}, User.objects.get(id = userid)
+    data, user, V = {}, User.objects.get(id = userid), []
     if request.method == 'POST':
         if request.POST['action'] == 'info':
             form = ProfileForm(request.POST, instance=request.user.profile)
@@ -35,13 +35,18 @@ def index(request, userid):
             vacancy = Vacancy.objects.get(id=int(request.POST['action'].split('!')[1]))
             form = VacancyForm(request.POST, instance=vacancy)
             form.save()
+    if user != request.user:
+        for i in Vacancy.objects.filter(user = user):
+            if request.user.is_authenticated and len(FavV.objects.filter(user=request.user, vacancy=i))==1 and FavV.objects.get(user=request.user, vacancy=i).U: V.insert(0, (i, True))
+            else: V.insert(0, (i, False))
+    else: V = list(reversed(Vacancy.objects.filter(user = user)))
     data['uobj'] = user
     data['profile'] = ProfileForm(instance=user.profile)
     data['wish'] = user.profile.job_wish.split('!')
     data['profession'] = user.profile.profession.split('!')
     data['experience'] = user.profile.experience.split('!')
     data['vform'] = VacancyForm()
-    data['vacancy'] = list(reversed(Vacancy.objects.filter(user = user)))
+    data['vacancy'] = V
     data['vlabels'] = V_L
     data['login'] = LoginForm()
     data['registration'] = RegistrationForm()
